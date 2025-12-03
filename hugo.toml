@@ -64,7 +64,7 @@ theme = "dream"
   # reorderNavItems = ["home","about", "search", "rss", "posts", "categories", "tags"]
   
   # 移动端折叠菜单
-  # collapseNavItems = ["posts", "categories", "tags"]
+  collapseNavItems = ["home", "posts", "categories", "tags", "about", "github","email"]
   
   # 隐藏默认封面
   noDefaultSummaryCover = true
