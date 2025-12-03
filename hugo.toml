@@ -1,0 +1,140 @@
+baseURL = "http://hxjxtwg.github.io/"
+defaultContentLanguage = "zh-cn"
+languageCode = "zh-Hans"
+title = "我的 Dream 博客"
+theme = "dream"
+
+# ================= 服务设置 =================
+# [services]
+#   [services.disqus]
+#     shortname = ""
+#   [services.googleAnalytics]
+#     ID = ""
+
+# ================= 主题参数设置 =================
+[params]
+  # 禅模式 (默认关闭。开启后变为双栏布局，关闭为翻转卡片)
+  # zenMode = true
+
+  # 配色方案
+  lightTheme = "emerald"
+  darkTheme = "forest"
+
+  # 背景图
+  # backgroundImage = "img/global-background.jpg"
+  # backgroundImageDark = ""
+
+  author = "xxsky"
+  description = "这是我的博客"
+  avatar = "img/avatar.png"      # 请确保 static/img/ 目录下有这张图
+  headerTitle = "Hugo Theme Dream"
+  # motto = ""
+
+  # 页脚自定义文字
+  # footerBottomText = ""
+
+  # RSS 图标
+  rss = true
+
+  # 评论系统 (按需打开)
+  # utterancesRepo = ""
+  # valine = true
+  # LEANCLOUD_APP_ID = ""
+  # LEANCLOUD_APP_KEY = ""
+  # waline = true
+  # walineServer = ""
+
+  # === 联系方式 (原版字段) ===
+  # 填入后，侧边栏会自动显示邮箱图标
+  # email = "xuhxjxhk@gmail.com"
+
+  siteStartYear = 2016
+
+  # favicon = "favicon.ico"
+
+  # 代码高亮开关
+  # 建议关闭，配合我们的 style.css 使用
+  customSyntaxHighlighting = false
+
+  # ================= 功能开关 =================
+  # 导航栏吸顶
+  stickyNav = true
+
+  # 导航菜单排序 (必须包含 about 才能显示关于按钮)
+  reorderNavItems = ["about", "search", "rss", "posts", "categories", "tags"]
+  
+  # 移动端折叠菜单
+  collapseNavItems = ["posts", "categories", "tags"]
+  
+  # 隐藏默认封面
+  noDefaultSummaryCover = true
+  
+  # 显示文章目录
+  showTableOfContents = true
+  
+  # 文章页显示封面图
+  showSummaryCoverInPost = true
+  
+  # 图片点击放大
+  imageZoomableInPost = true
+  
+  # 显示上下篇导航
+  showPrevNextPost = true
+  
+  # 分享按钮 (留空数组 = 关闭)
+  reorderShares = []
+
+  # ================= 自定义菜单 =================
+  # [params.navItems]
+
+  # ================= Twikoo 评论 =================
+  # [params.twikoo]
+  # enabled = true
+  # envID = ""
+  # region = ""
+  # lang = ""
+
+  [params.navItems]
+  # 首页
+  home = { href = "/", icon = "home", title = "首页" }
+  
+  # 文章归档
+  posts = { href = "/posts", icon = "book", title = "文章" }
+  categories = { href = "/categories", icon = "grid", title = "分类" }
+  tags = { href = "/tags", icon = "pricetags", title = "标签" }
+
+  # 邮箱 (可选，如果想放在顶部)
+  email = { href = "mailto:xuhxjxhk@gmail.com", icon = "mail", title = "Email" }
+
+  # ！！！核心修复：定义 GitHub 按钮！！！
+  # 这样 GitHub 图标就会显示在顶部，而不需要用 socialLinks
+  github = { href = "https://github.com/xuhxjx", icon = "logo-github", title = "GitHub" }
+
+  # ================= 高级设置 =================
+  [params.advanced]
+    # 挂载您的特效文件 (Halo动画 + 扁平代码块)
+    customCSS = ["css/style.css"]
+    customJS = ["js/app.js"]
+
+  # ================= 实验性功能 =================
+  [params.experimental]
+    # 开启日期中文显示
+    jsDate = true
+    jsDateFormat = "yyyy年MM月dd日"
+
+# ======================================================
+# 代码高亮设置 (Markup)
+# ======================================================
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = true
+    lineNumbersInTable = true
+    noClasses = false
+    style = "friendly"
+    tabWidth = 4
+  
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
