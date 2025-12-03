@@ -102,8 +102,26 @@ html.dark .highlight.folded::after { background:linear-gradient(to bottom, trans
 html.dark .c-btn { color: #aaa; }
 html.dark .c-btn:hover { background: transparent; color: #ff79c6; }
 
-/* 高亮颜色 */
-.chroma .k { color: #0088ce; } 
-.chroma .s { color: #d14; }
-html.dark .chroma .k { color: #ff79c6 !important; }
-html.dark .chroma .s { color: #f1fa8c !important; }
+/* ================= 3. 完整语法颜色集 (Light/Dark) ================= */
+
+/* --- 浅色模式 (Light - 默认) --- */
+.chroma .k, .chroma .kd, .chroma .kt { color: #0088ce; font-weight: bold; } /* 关键字 (blue) */
+.chroma .s, .chroma .s1, .chroma .s2 { color: #a31515; } /* 字符串 (red) */
+.chroma .c, .chroma .c1, .chroma .cm { color: #888888; font-style: italic; } /* 注释 (grey) */
+.chroma .nf { color: #660066; font-weight: bold; } /* 函数名 */
+.chroma .mi, .chroma .mb, .chroma .mf { color: #660066; } /* 数字/浮点数 */
+.chroma .nc { color: #008080; } /* 类名 */
+.chroma .na, .chroma .nt { color: #000080; } /* 标签/属性 */
+.chroma .nb { color: #0086b3; } /* 内置对象/函数 */
+
+
+/* --- 深色模式适配 (Dracula/Neon Mix) --- */
+html.dark .chroma .k, html.dark .chroma .kd, html.dark .chroma .kt { color: #ff79c6 !important; } /* 关键字/类型: 粉色 */
+html.dark .chroma .s { color: #f1fa8c !important; } /* 字符串: 黄色 */
+html.dark .chroma .c { color: #6272a4 !important; } /* 注释: 蓝灰 */
+
+html.dark .chroma .nf { color: #50fa7b !important; font-weight: bold; } /* 函数名: 绿色 */
+html.dark .chroma .mi, html.dark .chroma .mf, html.dark .chroma .mb { color: #bd93f9 !important; } /* 数字: 紫色 */
+html.dark .chroma .na { color: #50fa7b !important; } /* 属性名: 绿色 */
+html.dark .chroma .nt { color: #ff79c6 !important; } /* 标签名: 粉色 */
+html.dark .chroma .nb { color: #8be9fd !important; } /* 内置对象: 浅蓝 */
