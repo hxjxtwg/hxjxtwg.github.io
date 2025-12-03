@@ -125,3 +125,27 @@ html.dark .chroma .mi, html.dark .chroma .mf, html.dark .chroma .mb { color: #bd
 html.dark .chroma .na { color: #50fa7b !important; } /* 属性名: 绿色 */
 html.dark .chroma .nt { color: #ff79c6 !important; } /* 标签名: 粉色 */
 html.dark .chroma .nb { color: #8be9fd !important; } /* 内置对象: 浅蓝 */
+
+/* ================= 3. 导航栏强制显示文字 ================= */
+/* 让导航栏的所有链接变成：图标 + 文字 */
+.navbar .menu-item span,
+nav .menu a span,
+nav a[title] {
+    display: inline-block !important; /* 强制显示文字 */
+    margin-left: 5px; /* 图标和字之间留点缝隙 */
+    font-size: 14px;
+}
+
+/* 如果主题用的是 title 属性没渲染出 span，用伪元素强制显示 */
+nav a[title]::after {
+    content: attr(title); /* 取出 title 里的字显示出来 */
+    margin-left: 5px;
+    font-size: 14px;
+    display: inline-block; /* 确保不换行 */
+}
+
+/* 针对 ion-icon 的微调 */
+nav a ion-icon {
+    font-size: 1.2em; /* 图标稍微大一点 */
+    vertical-align: text-bottom;
+}
