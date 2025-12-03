@@ -27,14 +27,14 @@ theme = "dream"
   author = "xxsky"
   description = "xxsky blog"
   avatar = "img/avatar.png"      # 请确保 static/img/ 目录下有这张图
-  headerTitle = "Hugo Theme Dream"
+  headerTitle = "xxsky blog"
   # motto = ""
 
   # 页脚自定义文字
   # footerBottomText = ""
 
   # RSS 图标
-  rss = true
+  # rss = true
 
   # 评论系统 (按需打开)
   # utterancesRepo = ""

@@ -1,5 +1,28 @@
-hugo安装、修改配置、部署详细过程
+---
 
+title: "Hugo安装修改部署"
+
+date: 2025-12-03T21:23:59+08:00
+
+lastmod: 2025-12-03T21:23:59+08:00
+
+draft: false
+
+categories: ["技术"]
+
+tags: ["技术"]
+
+author: "xxsky"
+
+description: ""
+
+\# cover: /images/default.jpg
+
+---
+
+
+
+hugo安装、修改配置、部署详细过程
 <!--more-->
 
 ## 一、安装hugo
@@ -99,10 +122,10 @@ git submodule add https://github.com/g1eny0ung/hugo-theme-dream.git themes/dream
 以下以Dream主题为例,VS Code操作
 ### 1. hugo.toml
 ```yaml
-baseURL = "/"
+baseURL = "http://example.org/"
 defaultContentLanguage = "zh-cn"
-languageCode = "zh-Hans"
-title = "xxsky blog"
+languageCode = "zh-CN"
+title = "我的 Dream 博客"
 theme = "dream"
 
 # ================= 服务设置 =================
@@ -904,3 +927,4 @@ git push
 * 等它变成 绿色对号 ✅，您的博客就自动更新成功了！
 
 以后只要您本地 git push，这个文件就会指挥 GitHub 自动干活，再也不会丢了！
+
