@@ -27,56 +27,58 @@ html.dark #halo-racer-loader { background: #1a1a1a; }
 @keyframes run { 0%{left:0} 30%{left:68px} 50%{left:68px} 80%{left:0} 100%{left:0} }
 
 
-/* ================= 2. 代码块扁平化与配色修正 ================= */
+/* ================= 2. 代码块扁平化与配色修正 (修复滚动条) ================= */
 
+/* 容器与背景 */
 .highlight { 
-    background: #f6f8fa!important; border-radius: 6px !important; margin: 1.5rem 0; padding: 0; overflow: hidden; position: relative; box-shadow: none !important; border: none !important; transition: height 0.3s ease; color: #24292e; 
+    background: #f6f8fa!important; 
+    border-radius: 6px !important; 
+    margin: 1.5rem 0; 
+    padding: 0; 
+    position: relative; 
+    box-shadow: none !important; 
+    border: none !important; 
+    transition: height 0.3s ease; 
+    color: #24292e;
+    
+    /* 【核心修复】平时允许横向滚动，防止代码被截断 */
+    overflow-x: auto !important; 
+    overflow-y: hidden !important; /* 纵向隐藏，防止高度动画抖动 */
 }
 html.dark .highlight { background: #282a36!important; color: #f8f8f2 !important; }
 
-/* --- 折叠状态 --- */
-.highlight.folded { height: 60px !important; overflow: hidden !important; }
-.highlight.folded::after { content:""; position:absolute; bottom:0; width:100%; height:30px; background:linear-gradient(to bottom, transparent, #f6f8fa); pointer-events: none; }
+/* --- 折叠状态 (优先级最高) --- */
+.highlight.folded { 
+    height: 60px !important; 
+    /* 折叠时必须隐藏所有溢出，否则会漏出来 */
+    overflow: hidden !important; 
+}
+.highlight.folded::after { content:""; position:absolute; bottom:0; width:100%; height:30px; background:linear-gradient(to bottom, transparent, #f6f8fa); pointer-events: none; z-index: 5; }
 html.dark .highlight.folded::after { background:linear-gradient(to bottom, transparent, #282a36); }
 
 /* 内部结构修正 */
 .highlight table { margin: 0 !important; width: 100%; }
-.highlight td:first-child { width: 40px !important; background: transparent !important; border-right: none !important; padding: 10px 0 !important; user-select: none; }
-.highlight td:last-child { padding: 10px 15px !important; width: 100%; }
-.highlight .lnt { color: #999!important; font-size: 12px; margin-right: 8px; text-align: right; display: block; }
-/* 代码内容区域修正 (修复滚动条) */
+.highlight td:first-child { width: 40px !important; background: transparent !important; border-right: none !important; padding: 10px 0 !important; user-select: none; vertical-align: top; }
+.highlight td:last-child { padding: 10px 15px !important; width: 100%; vertical-align: top; }
+.highlight .lnt { color: #999 !important; font-size: 12px; margin-right: 8px; text-align: right; display: block; }
+
+/* 【核心修复】强制代码不换行，撑出滚动条 */
 .highlight pre { 
     font-family: Consolas, Monaco, "Andale Mono", monospace; 
     font-size: 14px; 
     line-height: 1.6; 
-    
-    /* 核心修复：强制不换行，溢出显示滚动条 */
-    white-space: pre !important;      /* 禁止自动换行 */
-    overflow-x: auto !important;      /* 内容超宽时显示横向滚动条 */
-    word-wrap: normal !important;     /* 禁止单词断行 */
-    
-    /* 优化滚动条样式 (Chrome/Safari/Edge) */
-    scrollbar-width: thin;            /* Firefox 细滚动条 */
-    padding-bottom: 10px !important;  /* 给滚动条留点空间，别挡住最后一行代码 */
+    white-space: pre !important;  /* 强制不换行 */
+    word-wrap: normal !important; /* 禁止断词 */
+    display: block;
 }
 
-/* 配合修复：给滚动条加个好看的颜色 (可选) */
-.highlight pre::-webkit-scrollbar {
-    height: 6px; /* 横向滚动条高度 */
-}
-.highlight pre::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2); /* 滚动条颜色 */
-    border-radius: 3px;
-}
-html.dark .highlight pre::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.2); /* 深色模式滚动条 */
-}
-
-
-/* 按钮组样式 */
-.code-tools { position: absolute; top: 6px; right: 6px; display: flex; opacity: 0; transition: opacity 0.2s; z-index: 10; }
+/* 按钮组样式 (保持不变) */
+.code-tools { position: absolute; top: 0; right: 0; display: flex; opacity: 0; transition: opacity 0.2s; z-index: 10; }
 .highlight:hover .code-tools { opacity: 1; }
-.c-btn { width: 30px; height: 30px; background: transparent; border:none; cursor:pointer; color:#333; display:flex; justify-content:center; align-items:center; transition: all 0.2s ease; }
+/* 这里的 sticky 是为了让按钮在横向滚动时一直固定在右上角，不随代码滚走 */
+.code-tools { position: sticky; left: 100%; margin-left: -70px; } 
+
+.c-btn { width: 30px; height: 30px; background: transparent; border:none; cursor:pointer; color:#999; display:flex; justify-content:center; align-items:center; transition: all 0.2s ease; }
 .c-btn:hover { background: transparent; color: #ff4757; }
 html.dark .c-btn { color: #aaa; }
 html.dark .c-btn:hover { background: transparent; color: #ff79c6; }
