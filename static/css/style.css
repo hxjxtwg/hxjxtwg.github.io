@@ -44,7 +44,33 @@ html.dark .highlight.folded::after { background:linear-gradient(to bottom, trans
 .highlight td:first-child { width: 40px !important; background: transparent !important; border-right: none !important; padding: 10px 0 !important; user-select: none; }
 .highlight td:last-child { padding: 10px 15px !important; width: 100%; }
 .highlight .lnt { color: #999!important; font-size: 12px; margin-right: 8px; text-align: right; display: block; }
-.highlight pre { font-family: Consolas, Monaco, "Andale Mono", monospace; font-size: 14px; line-height: 1.6; }
+/* 代码内容区域修正 (修复滚动条) */
+.highlight pre { 
+    font-family: Consolas, Monaco, "Andale Mono", monospace; 
+    font-size: 14px; 
+    line-height: 1.6; 
+    
+    /* 核心修复：强制不换行，溢出显示滚动条 */
+    white-space: pre !important;      /* 禁止自动换行 */
+    overflow-x: auto !important;      /* 内容超宽时显示横向滚动条 */
+    word-wrap: normal !important;     /* 禁止单词断行 */
+    
+    /* 优化滚动条样式 (Chrome/Safari/Edge) */
+    scrollbar-width: thin;            /* Firefox 细滚动条 */
+    padding-bottom: 10px !important;  /* 给滚动条留点空间，别挡住最后一行代码 */
+}
+
+/* 配合修复：给滚动条加个好看的颜色 (可选) */
+.highlight pre::-webkit-scrollbar {
+    height: 6px; /* 横向滚动条高度 */
+}
+.highlight pre::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2); /* 滚动条颜色 */
+    border-radius: 3px;
+}
+html.dark .highlight pre::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2); /* 深色模式滚动条 */
+}
 
 
 /* 按钮组样式 */
