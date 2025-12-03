@@ -64,7 +64,7 @@ theme = "dream"
   # reorderNavItems = ["home","about", "search", "rss", "posts", "categories", "tags"]
   
   # 移动端折叠菜单
-  collapseNavItems = ["home", "posts", "categories", "tags", "about", "github","email"]
+  collapseNavItems = ["home", "posts", "categories", "tags", "github","email"]
   
   # 隐藏默认封面
   noDefaultSummaryCover = true
@@ -94,26 +94,26 @@ theme = "dream"
   # ================= 自定义菜单 =================
   [params.navItems]
   # 首页
-  home = { href = "/", icon = "home", title = "" }
+  #home = { href = "/", icon = "home", title = "" }
   
   # 文章 (之前可能叫 posts，您也可以改名叫 archives 归档)
-  posts = { href = "/posts", icon = "book", title = "归档" }
+  #posts = { href = "/posts", icon = "book", title = "归档" }
   
   # 分类
-  categories = { href = "/categories", icon = "grid", title = "分类" }
+  #categories = { href = "/categories", icon = "grid", title = "分类" }
   
   # 标签
-  tags = { href = "/tags", icon = "pricetags", title = "标签" } 
+  #tags = { href = "/tags", icon = "pricetags", title = "标签" } 
   # 注意：图标名用 pricetags (Ionicons)，不要用 tag (可能报错)
 
   # 关于
-  about = { href = "/about", icon = "person", title = "关于" }
+  #about = { href = "/about", icon = "person", title = "关于" }
 
   # GitHub
-  github = { href = "https://github.com/xuhxjx", icon = "logo-github", title = "" }
+  # github = { href = "https://github.com/xuhxjx", icon = "logo-github", title = "" }
 
   # 邮箱
-  email = { href = "mailto:xuhxjxhk@gmail.com", icon = "mail", title = "" }
+  # email = { href = "mailto:xuhxjxhk@gmail.com", icon = "mail", title = "" }
 
   # ================= 高级设置 =================
   [params.advanced]
