@@ -94,7 +94,7 @@ theme = "dream"
   # ================= 自定义菜单 =================
   [params.navItems]
   # 首页
-  #home = { href = "/", icon = "home", title = "" }
+  home = { href = "/", icon = "home", title = "" }
   
   # 文章 (之前可能叫 posts，您也可以改名叫 archives 归档)
   #posts = { href = "/posts", icon = "book", title = "归档" }
@@ -110,10 +110,10 @@ theme = "dream"
   #about = { href = "/about", icon = "person", title = "关于" }
 
   # GitHub
-  # github = { href = "https://github.com/xuhxjx", icon = "logo-github", title = "" }
+  github = { href = "https://github.com/xuhxjx", icon = "logo-github", title = "" }
 
   # 邮箱
-  # email = { href = "mailto:xuhxjxhk@gmail.com", icon = "mail", title = "" }
+  email = { href = "mailto:xuhxjxhk@gmail.com", icon = "mail", title = "" }
 
   # ================= 高级设置 =================
   [params.advanced]
