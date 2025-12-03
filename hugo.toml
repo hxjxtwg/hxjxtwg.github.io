@@ -96,17 +96,24 @@ theme = "dream"
   # 首页
   home = { href = "/", icon = "home", title = "首页" }
   
-  # 文章归档
-  posts = { href = "/posts", icon = "book", title = "文章" }
+  # 文章 (之前可能叫 posts，您也可以改名叫 archives 归档)
+  posts = { href = "/posts", icon = "book", title = "归档" }
+  
+  # 分类
   categories = { href = "/categories", icon = "grid", title = "分类" }
-  tags = { href = "/tags", icon = "pricetags", title = "标签" }
+  
+  # 标签
+  tags = { href = "/tags", icon = "pricetags", title = "标签" } 
+  # 注意：图标名用 pricetags (Ionicons)，不要用 tag (可能报错)
 
-  # 邮箱 (可选，如果想放在顶部)
-  email = { href = "mailto:xuhxjxhk@gmail.com", icon = "mail", title = "Email" }
+  # 关于
+  about = { href = "/about", icon = "person", title = "关于" }
 
-  # ！！！核心修复：定义 GitHub 按钮！！！
-  # 这样 GitHub 图标就会显示在顶部，而不需要用 socialLinks
+  # GitHub
   github = { href = "https://github.com/xuhxjx", icon = "logo-github", title = "GitHub" }
+
+  # 邮箱
+  email = { href = "mailto:xuhxjxhk@gmail.com", icon = "mail", title = "邮箱" }
 
   # ================= 高级设置 =================
   [params.advanced]
