@@ -1,8 +1,26 @@
-+++
-date = '2025-12-01T16:51:52+08:00'
-draft = false
-title = 'Ceshi'
-+++
+---
+
+title: "关于openlist文件命名"
+
+date: 2025-12-03T21:14:47+08:00
+
+lastmod: 2025-12-03T21:14:47+08:00
+
+draft: false
+
+categories: ["技术"]
+
+tags: ["技术"]
+
+author: "xxsky"
+
+description: ""
+
+\# cover: /images/default.jpg
+
+---
+
+
 
 正则表达式的重命名
 

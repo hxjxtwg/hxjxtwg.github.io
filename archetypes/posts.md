@@ -8,9 +8,9 @@ lastmod: {{ .Date }}
 
 draft: false
 
-categories: \["随笔"]
+categories: ["技术"]
 
-tags: \["Hugo"]
+tags: ["技术"]
 
 author: "xxsky"
 

@@ -1,7 +1,7 @@
 baseURL = "/"
 defaultContentLanguage = "zh-cn"
 languageCode = "zh-Hans"
-title = "我的 Dream 博客"
+title = "xxsky blog"
 theme = "dream"
 
 # ================= 服务设置 =================
@@ -25,7 +25,7 @@ theme = "dream"
   # backgroundImageDark = ""
 
   author = "xxsky"
-  description = "这是我的博客"
+  description = "xxsky blog"
   avatar = "img/avatar.png"      # 请确保 static/img/ 目录下有这张图
   headerTitle = "Hugo Theme Dream"
   # motto = ""
@@ -48,9 +48,9 @@ theme = "dream"
   # 填入后，侧边栏会自动显示邮箱图标
   # email = "xuhxjxhk@gmail.com"
 
-  siteStartYear = 2016
+  siteStartYear = 2024
 
-  # favicon = "favicon.ico"
+  favicon = "img/favicon.ico"
 
   # 代码高亮开关
   # 建议关闭，配合我们的 style.css 使用
@@ -61,7 +61,7 @@ theme = "dream"
   stickyNav = true
 
   # 导航菜单排序 (必须包含 about 才能显示关于按钮)
-  reorderNavItems = ["about", "search", "rss", "posts", "categories", "tags"]
+  # reorderNavItems = ["home","about", "search", "rss", "posts", "categories", "tags"]
   
   # 移动端折叠菜单
   collapseNavItems = ["posts", "categories", "tags"]
@@ -84,9 +84,6 @@ theme = "dream"
   # 分享按钮 (留空数组 = 关闭)
   reorderShares = []
 
-  # ================= 自定义菜单 =================
-  # [params.navItems]
-
   # ================= Twikoo 评论 =================
   # [params.twikoo]
   # enabled = true
@@ -94,6 +91,7 @@ theme = "dream"
   # region = ""
   # lang = ""
 
+  # ================= 自定义菜单 =================
   [params.navItems]
   # 首页
   home = { href = "/", icon = "home", title = "首页" }

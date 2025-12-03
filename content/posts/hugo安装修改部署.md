@@ -1,28 +1,5 @@
----
-
-title: "Hugo安装修改部署"
-
-date: 2025-12-03T19:33:52+08:00
-
-lastmod: 2025-12-03T19:33:52+08:00
-
-draft: false
-
-categories: \["技术"]
-
-tags: \["技术"]
-
-author: "xxsky"
-
-description: ""
-
-\# cover: /images/default.jpg
-
----
-
-
-
 hugo安装、修改配置、部署详细过程
+
 <!--more-->
 
 ## 一、安装hugo
@@ -122,10 +99,10 @@ git submodule add https://github.com/g1eny0ung/hugo-theme-dream.git themes/dream
 以下以Dream主题为例,VS Code操作
 ### 1. hugo.toml
 ```yaml
-baseURL = "http://example.org/"
+baseURL = "/"
 defaultContentLanguage = "zh-cn"
-languageCode = "zh-CN"
-title = "我的 Dream 博客"
+languageCode = "zh-Hans"
+title = "xxsky blog"
 theme = "dream"
 
 # ================= 服务设置 =================
@@ -266,17 +243,10 @@ theme = "dream"
 ### 2. 加载halo动画与代码块样式
 新建static/css/style.css文件,内容：
 ```css
-/* --- 修复根元素高度，确保固定定位元素能撑满全屏 --- */
-html, body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-}
-/* ---------------------------------------------------- */
+/* --- 修复根元素高度 --- */
+html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
 
-
-/* ================= 1. Halo 赛车加载动画 (定位 FIX) ================= */
+/* ================= 1. Halo 赛车加载动画 ================= */
 #halo-racer-loader { 
     position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;     
     width: 100% !important; height: 100% !important; z-index: 999999999 !important; 
@@ -286,43 +256,96 @@ html, body {
 html.dark #halo-racer-loader { background: #1a1a1a; }
 #halo-racer-loader.hidden { opacity: 0; visibility: hidden; }
 
-/* Halo 方块和动画定义 */
 .racer-container { position: relative; width: 80px; height: 20px; }
 .bar { position: absolute; top: 0; left: 0; width: 12px; height: 20px; border-radius: 0; }
 .p1 { background: rgba(255,71,87,0.2); z-index:1; animation: run 1.5s cubic-bezier(.4,0,.2,1) infinite 0.15s; }
-.p2 { background: rgba(0,0,0,0.05); z-index:2; animation: run 1.5s cubic-bezier(.4,0,.2,1) infinite 0.08s; }
+.p2 { background: rgba(255,71,87,0.5); z-index:2; animation: run 1.5s cubic-bezier(.4,0,.2,1) infinite 0.08s; }
 .red { background: #ff4757; z-index:10; animation: run 1.5s cubic-bezier(.4,0,.2,1) infinite 0s; }
 @keyframes run { 0%{left:0} 30%{left:68px} 50%{left:68px} 80%{left:0} 100%{left:0} }
 
 
-/* ================= 2. 代码块扁平化与配色修正 ================= */
+/* ================= 2. 代码块修复 (滚动条分离) ================= */
 
+/* 外层容器：负责圆角、背景、折叠，但不负责滚动！ */
 .highlight { 
-    background: #f6f8fa!important; border-radius: 6px !important; margin: 1.5rem 0; padding: 0; overflow: hidden; position: relative; box-shadow: none !important; border: none !important; transition: height 0.3s ease; color: #24292e; 
+    background: #f6f8fa!important; 
+    border-radius: 6px !important; 
+    margin: 1.5rem 0; 
+    padding: 0; 
+    position: relative; /* 按钮定位基准 */
+    box-shadow: none !important; 
+    border: none !important; 
+    transition: height 0.3s ease; 
+    color: #24292e;
+    
+    /* 关键：外层不滚动，只隐藏溢出（为了圆角和折叠） */
+    overflow: hidden !important; 
 }
 html.dark .highlight { background: #282a36!important; color: #f8f8f2 !important; }
 
-/* --- 折叠状态 --- */
-.highlight.folded { height: 60px !important; overflow: hidden !important; }
-.highlight.folded::after { content:""; position:absolute; bottom:0; width:100%; height:30px; background:linear-gradient(to bottom, transparent, #f6f8fa); pointer-events: none; }
+/* 折叠状态 */
+.highlight.folded { height: 60px !important; }
+.highlight.folded::after { content:""; position:absolute; bottom:0; width:100%; height:30px; background:linear-gradient(to bottom, transparent, #f6f8fa); pointer-events: none; z-index: 5; }
 html.dark .highlight.folded::after { background:linear-gradient(to bottom, transparent, #282a36); }
 
-/* 内部结构修正 */
-.highlight table { margin: 0 !important; width: 100%; }
-.highlight td:first-child { width: 40px !important; background: transparent !important; border-right: none !important; padding: 10px 0 !important; user-select: none; }
-.highlight td:last-child { padding: 10px 15px !important; width: 100%; }
+/* --- 内部滚动控制 --- */
+
+/* 1. 表格模式 (lineNos=true) 的滚动控制 */
+.highlight table { 
+    display: block !important;       /* 变成块级才能滚动 */
+    width: 100% !important; 
+    overflow-x: auto !important;     /* 横向滚动条在这里 */
+    margin: 0 !important; 
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+/* 2. 纯代码模式 (lineNos=false) 的滚动控制 */
+.highlight pre {
+    overflow-x: auto !important;     /* 横向滚动条在这里 */
+    white-space: pre !important;     /* 强制不换行 */
+    word-wrap: normal !important;
+    display: block;
+    padding: 10px 15px !important;
+    margin: 0 !important;
+    width: 100%;
+}
+
+/* 表格内单元格样式 */
+.highlight td:first-child { 
+    width: 40px !important; 
+    background: transparent !important; 
+    padding: 10px 0 !important; 
+    user-select: none; 
+    vertical-align: top;
+    position: sticky; /* (可选) 让行号在滚动时固定 */
+    left: 0;
+    z-index: 2;
+}
+.highlight td:last-child { 
+    padding: 10px 15px !important; 
+    width: 100%; 
+    vertical-align: top; 
+}
+
 .highlight .lnt { color: #999!important; font-size: 12px; margin-right: 8px; text-align: right; display: block; }
-.highlight pre { font-family: Consolas, Monaco, "Andale Mono", monospace; font-size: 14px; line-height: 1.6; }
 
-
-/* 按钮组样式 */
-.code-tools { position: absolute; top: 6px; right: 6px; display: flex; opacity: 0; transition: opacity 0.2s; z-index: 10; }
+/* 按钮组 (固定在右上角) */
+.code-tools { 
+    position: absolute; 
+    top: 6px; 
+    right: 6px; 
+    display: flex; 
+    opacity: 0; 
+    transition: opacity 0.2s; 
+    z-index: 20; /* 层级最高，要在滚动条上面 */
+}
 .highlight:hover .code-tools { opacity: 1; }
-.c-btn { width: 30px; height: 30px; background: transparent; border:none; cursor:pointer; color:#333; display:flex; justify-content:center; align-items:center; transition: all 0.2s ease; }
+
+.c-btn { width: 30px; height: 30px; background: transparent; border:none; cursor:pointer; color:#999; display:flex; justify-content:center; align-items:center; transition: all 0.2s ease; }
 .c-btn:hover { background: transparent; color: #ff4757; }
 html.dark .c-btn { color: #aaa; }
 html.dark .c-btn:hover { background: transparent; color: #ff79c6; }
-
 
 /* ================= 3. 完整语法颜色集 (Light/Dark) ================= */
 
@@ -352,11 +375,7 @@ html.dark .chroma .nb { color: #8be9fd !important; } /* 内置对象: 浅蓝 */
 包含注入 Loader HTML 的代码和复制/折叠逻辑
 新建static/js/app.js文件，内容：
 ```JavaScript
-/* ====================================================================
-   Final JS Code: Halo Loader & Code Tools Logic
-   ==================================================================== */
-
-// 1. 动态注入 Halo 动画 HTML (使用 document.write 确保极早期加载)
+// 1. 动态注入 Halo 动画 HTML
 (function() {
   const loaderHTML = `
     <div id="halo-racer-loader">
@@ -368,88 +387,95 @@ html.dark .chroma .nb { color: #8be9fd !important; } /* 内置对象: 浅蓝 */
     </div>
   `;
   document.write(loaderHTML);
+
+  // 动画消失逻辑
+  const loader = document.getElementById('halo-racer-loader');
+  window.addEventListener('load', function() {
+    setTimeout(() => {
+      loader.classList.add('hidden');
+      setTimeout(() => { loader.style.display = 'none'; }, 300);
+    }, 1000); 
+  });
 })();
 
-// 2. 核心逻辑：代码块按钮 (复制 + 折叠)
+// 2. 代码块按钮逻辑 (智能默认折叠 + 复制)
 function attachCodeBlockTools() {
     const svgCopy = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
     const svgCheck = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+    
+    // 箭头向上（折叠图标）
     const svgFold = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>';
+    // 箭头向下（展开图标）
     const svgUnfold = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>';
 
-    // 检查代码块是否已经存在
     const codeBlocks = document.querySelectorAll('.highlight');
-    if (codeBlocks.length === 0) {
-        // 如果没有找到，退出函数
-        return;
-    }
+    if (codeBlocks.length === 0) return;
     
     codeBlocks.forEach(block => {
-        // 避免重复添加工具栏
         if (block.querySelector('.code-tools')) return; 
         
         const tools = document.createElement('div');
         tools.className = 'code-tools';
 
-        // 折叠按钮
-        const foldBtn = document.createElement('button');
-        foldBtn.className = 'c-btn';
-        foldBtn.innerHTML = svgFold;
-        foldBtn.title = "折叠/展开";
-        let isFolded = false;
+        // --- 折叠按钮逻辑 ---
+        const btnFold = document.createElement('button');
+        btnFold.className = 'c-btn';
         
-        // 核心修复点：折叠事件监听
-        foldBtn.addEventListener('click', () => {
+        // 【核心修改】智能判断：如果代码高度超过 150px，则默认折叠
+        // 您可以修改这个数字：150 代表约 6-7 行代码的高度
+        const threshold = 150; 
+        let isFolded = block.offsetHeight > threshold;
+
+        if (isFolded) {
+            block.classList.add('folded');   // 添加CSS折叠类
+            btnFold.innerHTML = svgUnfold;   // 显示"向下展开"图标
+            btnFold.title = "展开代码";
+        } else {
+            btnFold.innerHTML = svgFold;     // 显示"向上折叠"图标
+            btnFold.title = "折叠代码";
+        }
+
+        btnFold.onclick = () => {
             isFolded = !isFolded;
             block.classList.toggle('folded');
-            foldBtn.innerHTML = isFolded ? svgUnfold : svgFold;
-        });
+            // 切换图标：折叠时显示"展开(下箭头)"，展开时显示"折叠(上箭头)"
+            btnFold.innerHTML = isFolded ? svgUnfold : svgFold;
+            btnFold.title = isFolded ? "展开代码" : "折叠代码";
+        };
 
-        // 复制按钮
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'c-btn';
-        copyBtn.innerHTML = svgCopy;
-        copyBtn.title = "复制";
-        
-        copyBtn.addEventListener('click', () => {
+        // --- 复制按钮逻辑 ---
+        const btnCopy = document.createElement('button');
+        btnCopy.className = 'c-btn';
+        btnCopy.innerHTML = svgCopy;
+        btnCopy.title = "复制";
+        btnCopy.onclick = () => {
             const codeElement = block.querySelector('td:last-child pre code') || block.querySelector('code');
             const codeText = codeElement ? codeElement.innerText : block.innerText;
-            
             navigator.clipboard.writeText(codeText).then(() => {
-                copyBtn.innerHTML = svgCheck;
-                copyBtn.style.color = '#4caf50';
-                setTimeout(() => { copyBtn.innerHTML = svgCopy; copyBtn.style.color = ''; }, 2000);
+                btnCopy.innerHTML = svgCheck;
+                btnCopy.style.color = '#4caf50';
+                setTimeout(() => { 
+                    btnCopy.innerHTML = svgCopy; 
+                    btnCopy.style.color = ''; 
+                }, 2000);
             });
-        });
+        };
 
-        tools.appendChild(foldBtn);
-        tools.appendChild(copyBtn);
-        block.appendChild(tools);
+        tools.appendChild(btnFold);
+        tools.appendChild(btnCopy);
+        
+        // 插入到代码块最前面
+        block.insertBefore(tools, block.firstChild);
     });
 }
 
-
-// 3. 事件监听 (确保在 DOM 加载完成后执行)
+// 监听 DOM 加载
 document.addEventListener('DOMContentLoaded', attachCodeBlockTools);
 
-
-// 4. 动画消失逻辑 (需要等待所有资源加载完)
-window.addEventListener('load', function() {
-    const loader = document.getElementById('halo-racer-loader');
-    if (!loader) return; 
-
-    setTimeout(() => {
-        loader.classList.add('hidden');
-        setTimeout(() => { loader.style.display = 'none'; }, 300);
-    }, 1000); 
-});
-
-// 5. 5秒超时安全移除 (兜底)
+// 兜底超时
 setTimeout(function() { 
     const loader = document.getElementById('halo-racer-loader');
-    if (loader && !loader.classList.contains('hidden')) {
-        loader.classList.add('hidden'); 
-    }
+    if (loader && !loader.classList.contains('hidden')) loader.classList.add('hidden'); 
 }, 5000);
 ```
 ### 4. 背面内容
@@ -759,5 +785,122 @@ baseURL = "/"
 ```bash
 git push -f origin main
 ```
+## 十、本地工作流文件
+由于推送的问题，最好在本地自建工作流文件
+### 1.新建工作流文件夹
+请在您的博客根目录 D:\Tools\blog\hugo\ 下：
 
+* 新建一个文件夹，命名为 .github (注意前面有个点)。
 
+* 在 .github 文件夹里，再新建一个文件夹，命名为 workflows。
+
+* 在 workflows 文件夹里，新建一个文件，命名为 hugo.yaml。
+
+完整路径： D:\Tools\blog\hugo\.github\workflows\hugo.yaml
+
+### 2. 填入自动构建脚本
+
+打开这个 hugo.yaml 文件，粘贴下面这段标准代码。 (这段代码告诉 GitHub：每次有更新，就安装 Hugo，下载主题，生成网页，然后发布。)
+
+```YAML
+# Sample workflow for building and deploying a Hugo site to GitHub Pages
+name: Deploy Hugo site to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+# Default to bash
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.128.0 # 指定 Hugo 版本，比较稳定
+    steps:
+      - name: Install Hugo CLI
+        run: |
+          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
+          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive # 关键：一定要下载主题子模块，否则样式会乱
+          fetch-depth: 0
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Install Node.js dependencies
+        run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
+
+      - name: Build with Hugo
+        env:
+          # For maximum backward compatibility with Hugo modules
+          HUGO_ENVIRONMENT: production
+          HUGO_ENV: production
+        run: |
+          hugo \
+            --gc \
+            --minify \
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+### 3. 推送到 GitHub
+文件建好了，我们要把它传上去，让 GitHub 重新识别到它。
+
+在终端输入：
+```BASH
+git add .
+git commit -m "恢复 GitHub Actions 自动部署文件"
+git push
+```
+✅ 验证是否恢复
+* 推送完成后，打开您的 GitHub 仓库网页。
+
+* 点击顶部的 Actions 标签。
+
+* 您应该能看到一个新的工作流 "Deploy Hugo site to Pages" 正在运行（黄色转圈）。
+
+* 等它变成 绿色对号 ✅，您的博客就自动更新成功了！
+
+以后只要您本地 git push，这个文件就会指挥 GitHub 自动干活，再也不会丢了！
