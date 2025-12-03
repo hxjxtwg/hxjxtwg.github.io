@@ -27,7 +27,7 @@ theme = "dream"
   author = "xxsky"
   description = "xxsky blog"
   avatar = "img/avatar.png"      # 请确保 static/img/ 目录下有这张图
-  headerTitle = "xxsky blog"
+  headerTitle = "XXSKY BOLG"
   # motto = ""
 
   # 页脚自定义文字
@@ -64,7 +64,7 @@ theme = "dream"
   # reorderNavItems = ["home","about", "search", "rss", "posts", "categories", "tags"]
   
   # 移动端折叠菜单
-  collapseNavItems = ["posts", "categories", "tags"]
+  # collapseNavItems = ["posts", "categories", "tags"]
   
   # 隐藏默认封面
   noDefaultSummaryCover = true
