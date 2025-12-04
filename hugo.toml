@@ -24,3 +24,4 @@ theme = "PaperMod"
     lineNos = true
     # 关键就是下面这行，把它改成 "manni" 或者 "friendly" 这种浅色样式
     style = "friendly"
+    noClasses = true
