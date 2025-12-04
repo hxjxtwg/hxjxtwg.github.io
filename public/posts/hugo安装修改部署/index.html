@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Hugo安装修改部署 | 我的博客</title>
+<meta name="keywords" content="技术">
+<meta name="description" content="hugo安装、修改配置、部署详细过程">
+<meta name="author" content="xxsky">
+<link rel="canonical" href="//localhost:1313/posts/hugo%E5%AE%89%E8%A3%85%E4%BF%AE%E6%94%B9%E9%83%A8%E7%BD%B2/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.fd5566c526ae48aadabd950798a2dc3568536401560eae5caac3765a42a9e7b5.css" integrity="sha256-/VVmxSauSKravZUHmKLcNWhTZAFWDq5cqsN2WkKp57U=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/hugo%E5%AE%89%E8%A3%85%E4%BF%AE%E6%94%B9%E9%83%A8%E7%BD%B2/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="//localhost:1313/" accesskey="h" title="我的博客 (Alt + H)">我的博客</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="//localhost:1313/" title="首页">
+                    <span>首页</span>
+                </a>
+            </li>
+            <li>
+                <a href="//localhost:1313/posts/" title="文章">
+                    <span>文章</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Hugo安装修改部署
+    </h1>
+    <div class="post-meta"><span title='2025-12-03 21:23:59 +0800 CST'>December 3, 2025</span>&nbsp;·&nbsp;<span>xxsky</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>hugo安装、修改配置、部署详细过程</p>
+<h2 id="一安装hugo">一、安装hugo<a hidden class="anchor" aria-hidden="true" href="#一安装hugo">#</a></h2>
+<h3 id="方法一使用-windows-自带的命令-winget--最推荐">方法一：使用 Windows 自带的命令 (Winget) —— 最推荐<a hidden class="anchor" aria-hidden="true" href="#方法一使用-windows-自带的命令-winget--最推荐">#</a></h3>
+<h3 id="1-按键盘上的-win-键--r输入-cmd然后回车打开命令提示符">1. 按键盘上的 Win 键 + R，输入 cmd，然后回车打开“命令提示符”。<a hidden class="anchor" aria-hidden="true" href="#1-按键盘上的-win-键--r输入-cmd然后回车打开命令提示符">#</a></h3>
+<h3 id="2-在黑框里直接粘贴下面这行代码然后回车">2. 在黑框里直接粘贴下面这行代码，然后回车：<a hidden class="anchor" aria-hidden="true" href="#2-在黑框里直接粘贴下面这行代码然后回车">#</a></h3>
+<pre tabindex="0"><code class="language-dos" data-lang="dos">winget install Hugo.Hugo.Extended
+</code></pre><h3 id="3-等待进度条走完如果提示安装成功那您就搞定了">3. 等待进度条走完。如果提示“安装成功”，那您就搞定了！<a hidden class="anchor" aria-hidden="true" href="#3-等待进度条走完如果提示安装成功那您就搞定了">#</a></h3>
+<ul>
+<li>注：可能会弹窗询问是否允许安装，点击“是”即可。</li>
+</ul>
+<h3 id="4-验证-关闭这个黑框重新打开一个新的黑框-cmd输入-hugo-version如果有反应就说明环境搭好了">4. 验证： 关闭这个黑框，重新打开一个新的黑框 (cmd)，输入 hugo version。如果有反应，就说明环境搭好了。<a hidden class="anchor" aria-hidden="true" href="#4-验证-关闭这个黑框重新打开一个新的黑框-cmd输入-hugo-version如果有反应就说明环境搭好了">#</a></h3>
+<h3 id="方法二手动下载-最传统的解压即用法">方法二：手动下载 (最传统的“解压即用”法)<a hidden class="anchor" aria-hidden="true" href="#方法二手动下载-最传统的解压即用法">#</a></h3>
+<p>如果方法一报错或者没反应，我们可以用最传统的手动下载方式，就像下载普通软件一样，但多了一个“配置环境”的步骤。</p>
+<h3 id="1-下载安装包">1. 下载安装包<a hidden class="anchor" aria-hidden="true" href="#1-下载安装包">#</a></h3>
+<p>去 Hugo 的 GitHub 发布页面： <a href="https://github.com/gohugoio/hugo/releases">https://github.com/gohugoio/hugo/releases</a></p>
+<p>往下翻，找到最新的版本（Assets 列表里），下载这个文件： hugo_extended_xxxxx_windows-amd64.zip (注意：一定要下载带 extended 字样的版本，因为很多漂亮主题需要它)</p>
+<h3 id="2-解压">2. 解压<a hidden class="anchor" aria-hidden="true" href="#2-解压">#</a></h3>
+<p>把下载的压缩包解压。你会得到一个 hugo.exe 文件。 建议把它放在一个简单的路径下，比如 C 盘根目录新建一个文件夹叫 Hugo。 现在的路径应该是：C:\Hugo\hugo.exe</p>
+<h3 id="3-配置环境变量-最关键的一步">3. 配置环境变量 (最关键的一步)<a hidden class="anchor" aria-hidden="true" href="#3-配置环境变量-最关键的一步">#</a></h3>
+<p>为了让你在任何文件夹都能运行 hugo 命令，你需要告诉 Windows 这个文件在哪里。</p>
+<ul>
+<li>
+<p>按 Win 键，直接打字搜索 “编辑系统环境变量”，点击打开。</p>
+</li>
+<li>
+<p>在弹出的窗口右下角点击 “环境变量”。</p>
+</li>
+<li>
+<p>在下面的“系统变量”列表里，找到一行叫 Path 的，选中它，点击 “编辑”。</p>
+</li>
+<li>
+<p>点击右边的 “新建”。</p>
+</li>
+<li>
+<p>填入你刚才存放 hugo.exe 的文件夹路径，例如 C:\Hugo。</p>
+</li>
+<li>
+<p>一路点击“确定”关闭所有窗口。</p>
+</li>
+</ul>
+<h3 id="4-验证">4. 验证<a hidden class="anchor" aria-hidden="true" href="#4-验证">#</a></h3>
+<p>打开一个新的 cmd 窗口，输入：</p>
+<pre tabindex="0"><code class="language-dos" data-lang="dos">hugo version
+</code></pre><p>看到版本号就成功了！</p>
+<p>总结</p>
+<ul>
+<li>
+<p>先试试 方法一 (Winget)，一行代码搞定，最省心。</p>
+</li>
+<li>
+<p>如果不行，就用 方法二，虽然要点好几下鼠标，但是最稳妥。</p>
+</li>
+</ul>
+<p>您先试一下方法一，看看能不能成功？</p>
+<h3 id="二创建站点">二、创建站点<a hidden class="anchor" aria-hidden="true" href="#二创建站点">#</a></h3>
+<p>既然环境通了，我们现在就来生成博客的文件夹。为了方便文件管理，建议把博客放在适当的存放位置</p>
+<p>请继续在那个黑框（CMD）里，依次输入下面的命令（每行输完按回车）：</p>
+<h3 id="1-先进入需要存放博客站点的目录">1. 先进入需要存放博客站点的目录：<a hidden class="anchor" aria-hidden="true" href="#1-先进入需要存放博客站点的目录">#</a></h3>
+<pre tabindex="0"><code class="language-DOS" data-lang="DOS">d:
+cd d:\tools\blog
+</code></pre><h3 id="2-创建博客文件夹名字叫hugo">2. 创建博客文件夹（名字叫hugo）：<a hidden class="anchor" aria-hidden="true" href="#2-创建博客文件夹名字叫hugo">#</a></h3>
+<pre tabindex="0"><code class="language-DOS" data-lang="DOS">hugo new site hugo
+</code></pre><h3 id="3-进入这个新文件夹">3. 进入这个新文件夹：<a hidden class="anchor" aria-hidden="true" href="#3-进入这个新文件夹">#</a></h3>
+<pre tabindex="0"><code class="language-DOS" data-lang="DOS">cd hugo
+</code></pre><h2 id="三安装主题-theme">三、安装主题 (Theme)<a hidden class="anchor" aria-hidden="true" href="#三安装主题-theme">#</a></h2>
+<h3 id="1-初始化-git-仓库">1. 初始化 Git 仓库<a hidden class="anchor" aria-hidden="true" href="#1-初始化-git-仓库">#</a></h3>
+<pre tabindex="0"><code class="language-DOS" data-lang="DOS">git init
+</code></pre><h3 id="2-下载主题">2. 下载主题<a hidden class="anchor" aria-hidden="true" href="#2-下载主题">#</a></h3>
+<p>PaperMod主题</p>
+<pre tabindex="0"><code class="language-DOS" data-lang="DOS">git submodule add https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
+</code></pre><p>Dream主题</p>
+<pre tabindex="0"><code class="language-DOS" data-lang="DOS">git submodule add https://github.com/g1eny0ung/hugo-theme-dream.git themes/dream
+</code></pre><p>或者手动下载主题包：https://themes.gohugo.io</p>
+<h2 id="四修改配置文件">四、修改配置文件<a hidden class="anchor" aria-hidden="true" href="#四修改配置文件">#</a></h2>
+<p>以下以Dream主题为例,VS Code操作</p>
+<h3 id="1-hugotoml">1. hugo.toml<a hidden class="anchor" aria-hidden="true" href="#1-hugotoml">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ae81ff">baseURL = &#34;http://example.org/&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">defaultContentLanguage = &#34;zh-cn&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">languageCode = &#34;zh-CN&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">title = &#34;我的 Dream 博客&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">theme = &#34;dream&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ================= 服务设置 =================</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># [services]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   [services.disqus]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#     shortname = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   [services.googleAnalytics]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#     ID = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ================= 主题参数设置 =================</span>
+</span></span><span style="display:flex;"><span>[<span style="color:#ae81ff">params]</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 禅模式 (默认关闭。开启后变为双栏布局，关闭为翻转卡片)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># zenMode = true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 配色方案</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">lightTheme = &#34;emerald&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">darkTheme = &#34;forest&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 背景图</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># backgroundImage = &#34;img/global-background.jpg&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># backgroundImageDark = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">author = &#34;xxsky&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">description = &#34;这是我的博客&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">avatar = &#34;img/avatar.png&#34;     </span> <span style="color:#75715e"># 请确保 static/img/ 目录下有这张图</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">headerTitle = &#34;Hugo Theme Dream&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># motto = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 页脚自定义文字</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># footerBottomText = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># RSS 图标</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">rss = true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 评论系统 (按需打开)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># utterancesRepo = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># valine = true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># LEANCLOUD_APP_ID = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># LEANCLOUD_APP_KEY = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># waline = true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># walineServer = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># === 联系方式 (原版字段) ===</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 填入后，侧边栏会自动显示邮箱图标</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># email = &#34;xuhxjxhk@gmail.com&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">siteStartYear = 2016</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># favicon = &#34;favicon.ico&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 代码高亮开关</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 建议关闭，配合我们的 style.css 使用</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">customSyntaxHighlighting = false</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ================= 功能开关 =================</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 导航栏吸顶</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">stickyNav = true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 导航菜单排序 (必须包含 about 才能显示关于按钮)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">reorderNavItems = [&#34;about&#34;, &#34;search&#34;, &#34;rss&#34;, &#34;posts&#34;, &#34;categories&#34;, &#34;tags&#34;]</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 移动端折叠菜单</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">collapseNavItems = [&#34;posts&#34;, &#34;categories&#34;, &#34;tags&#34;]</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 隐藏默认封面</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">noDefaultSummaryCover = true</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 显示文章目录</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">showTableOfContents = true</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 文章页显示封面图</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">showSummaryCoverInPost = true</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 图片点击放大</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">imageZoomableInPost = true</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 显示上下篇导航</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">showPrevNextPost = true</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 分享按钮 (留空数组 = 关闭)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">reorderShares = []</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ================= 自定义菜单 =================</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># [params.navItems]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ================= Twikoo 评论 =================</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># [params.twikoo]</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># enabled = true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># envID = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># region = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># lang = &#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  [<span style="color:#ae81ff">params.navItems]</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 首页</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">home = { href = &#34;/&#34;, icon = &#34;home&#34;, title = &#34;首页&#34; }</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 文章归档</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">posts = { href = &#34;/posts&#34;, icon = &#34;book&#34;, title = &#34;文章&#34; }</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">categories = { href = &#34;/categories&#34;, icon = &#34;grid&#34;, title = &#34;分类&#34; }</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">tags = { href = &#34;/tags&#34;, icon = &#34;pricetags&#34;, title = &#34;标签&#34; }</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 邮箱 (可选，如果想放在顶部)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">email = { href = &#34;mailto:xuhxjxhk@gmail.com&#34;, icon = &#34;mail&#34;, title = &#34;Email&#34; }</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ！！！核心修复：定义 GitHub 按钮！！！</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># 这样 GitHub 图标就会显示在顶部，而不需要用 socialLinks</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">github = { href = &#34;https://github.com/xuhxjx&#34;, icon = &#34;logo-github&#34;, title = &#34;GitHub&#34; }</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ================= 高级设置 =================</span>
+</span></span><span style="display:flex;"><span>  [<span style="color:#ae81ff">params.advanced]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 挂载您的特效文件 (Halo动画 + 扁平代码块)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">customCSS = [&#34;css/style.css&#34;]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">customJS = [&#34;js/app.js&#34;]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ================= 实验性功能 =================</span>
+</span></span><span style="display:flex;"><span>  [<span style="color:#ae81ff">params.experimental]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 开启日期中文显示</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">jsDate = true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">jsDateFormat = &#34;yyyy年MM月dd日&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ======================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 代码高亮设置 (Markup)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ======================================================</span>
+</span></span><span style="display:flex;"><span>[<span style="color:#ae81ff">markup]</span>
+</span></span><span style="display:flex;"><span>  [<span style="color:#ae81ff">markup.highlight]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">codeFences = true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">guessSyntax = true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">lineNos = true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">lineNumbersInTable = true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">noClasses = false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">style = &#34;friendly&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">tabWidth = 4</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  [<span style="color:#ae81ff">markup.goldmark]</span>
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">markup.goldmark.renderer]</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">unsafe = true</span>
+</span></span></code></pre></div><h3 id="2-加载halo动画与代码块样式">2. 加载halo动画与代码块样式<a hidden class="anchor" aria-hidden="true" href="#2-加载halo动画与代码块样式">#</a></h3>
+<p>新建static/css/style.css文件,内容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span><span style="color:#75715e">/* --- 修复根元素高度 --- */</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span><span style="color:#f92672">,</span> <span style="color:#f92672">body</span> { <span style="color:#66d9ef">height</span>: <span style="color:#ae81ff">100</span><span style="color:#66d9ef">%</span>; <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">100</span><span style="color:#66d9ef">%</span>; <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0</span>; }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* ================= 1. Halo 赛车加载动画 ================= */</span>
+</span></span><span style="display:flex;"><span>#halo-racer-loader { 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">fixed</span> <span style="color:#75715e">!important</span>; <span style="color:#66d9ef">top</span>: <span style="color:#ae81ff">0</span> <span style="color:#75715e">!important</span>; <span style="color:#66d9ef">left</span>: <span style="color:#ae81ff">0</span> <span style="color:#75715e">!important</span>; <span style="color:#66d9ef">right</span>: <span style="color:#ae81ff">0</span> <span style="color:#75715e">!important</span>; <span style="color:#66d9ef">bottom</span>: <span style="color:#ae81ff">0</span> <span style="color:#75715e">!important</span>;     
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">100</span><span style="color:#66d9ef">%</span> <span style="color:#75715e">!important</span>; <span style="color:#66d9ef">height</span>: <span style="color:#ae81ff">100</span><span style="color:#66d9ef">%</span> <span style="color:#75715e">!important</span>; <span style="color:#66d9ef">z-index</span>: <span style="color:#ae81ff">999999999</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">background</span>: <span style="color:#ae81ff">#ffffff</span>; <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">flex</span> <span style="color:#75715e">!important</span>; <span style="color:#66d9ef">justify-content</span>: <span style="color:#66d9ef">center</span> <span style="color:#75715e">!important</span>; <span style="color:#66d9ef">align-items</span>: <span style="color:#66d9ef">center</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">transition</span>: <span style="color:#66d9ef">opacity</span> <span style="color:#ae81ff">0.3</span><span style="color:#66d9ef">s</span> <span style="color:#66d9ef">ease</span>, <span style="color:#66d9ef">visibility</span> <span style="color:#ae81ff">0.3</span><span style="color:#66d9ef">s</span> <span style="color:#66d9ef">ease</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> #halo-racer-loader { <span style="color:#66d9ef">background</span>: <span style="color:#ae81ff">#1a1a1a</span>; }
+</span></span><span style="display:flex;"><span>#halo-racer-loader.<span style="color:#a6e22e">hidden</span> { <span style="color:#66d9ef">opacity</span>: <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">visibility</span>: <span style="color:#66d9ef">hidden</span>; }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">racer-container</span> { <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">relative</span>; <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">80</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">height</span>: <span style="color:#ae81ff">20</span><span style="color:#66d9ef">px</span>; }
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">bar</span> { <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">absolute</span>; <span style="color:#66d9ef">top</span>: <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">left</span>: <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">12</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">height</span>: <span style="color:#ae81ff">20</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">border-radius</span>: <span style="color:#ae81ff">0</span>; }
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">p1</span> { <span style="color:#66d9ef">background</span>: rgba(<span style="color:#ae81ff">255</span>,<span style="color:#ae81ff">71</span>,<span style="color:#ae81ff">87</span>,<span style="color:#ae81ff">0.2</span>); <span style="color:#66d9ef">z-index</span>:<span style="color:#ae81ff">1</span>; <span style="color:#66d9ef">animation</span>: run <span style="color:#ae81ff">1.5</span><span style="color:#66d9ef">s</span> cubic-bezier(<span style="color:#ae81ff">.4</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">.2</span>,<span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">infinite</span> <span style="color:#ae81ff">0.15</span><span style="color:#66d9ef">s</span>; }
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">p2</span> { <span style="color:#66d9ef">background</span>: rgba(<span style="color:#ae81ff">255</span>,<span style="color:#ae81ff">71</span>,<span style="color:#ae81ff">87</span>,<span style="color:#ae81ff">0.5</span>); <span style="color:#66d9ef">z-index</span>:<span style="color:#ae81ff">2</span>; <span style="color:#66d9ef">animation</span>: run <span style="color:#ae81ff">1.5</span><span style="color:#66d9ef">s</span> cubic-bezier(<span style="color:#ae81ff">.4</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">.2</span>,<span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">infinite</span> <span style="color:#ae81ff">0.08</span><span style="color:#66d9ef">s</span>; }
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">red</span> { <span style="color:#66d9ef">background</span>: <span style="color:#ae81ff">#ff4757</span>; <span style="color:#66d9ef">z-index</span>:<span style="color:#ae81ff">10</span>; <span style="color:#66d9ef">animation</span>: run <span style="color:#ae81ff">1.5</span><span style="color:#66d9ef">s</span> cubic-bezier(<span style="color:#ae81ff">.4</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">.2</span>,<span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">infinite</span> <span style="color:#ae81ff">0</span><span style="color:#66d9ef">s</span>; }
+</span></span><span style="display:flex;"><span>@<span style="color:#66d9ef">keyframes</span> <span style="color:#f92672">run</span> { <span style="color:#f92672">0</span><span style="color:#f92672">%</span>{<span style="color:#66d9ef">left</span>:<span style="color:#ae81ff">0</span>} <span style="color:#f92672">30</span><span style="color:#f92672">%</span>{<span style="color:#66d9ef">left</span>:<span style="color:#ae81ff">68</span><span style="color:#66d9ef">px</span>} <span style="color:#f92672">50</span><span style="color:#f92672">%</span>{<span style="color:#66d9ef">left</span>:<span style="color:#ae81ff">68</span><span style="color:#66d9ef">px</span>} <span style="color:#f92672">80</span><span style="color:#f92672">%</span>{<span style="color:#66d9ef">left</span>:<span style="color:#ae81ff">0</span>} <span style="color:#f92672">100</span><span style="color:#f92672">%</span>{<span style="color:#66d9ef">left</span>:<span style="color:#ae81ff">0</span>} }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* ================= 2. 代码块修复 (滚动条分离) ================= */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* 外层容器：负责圆角、背景、折叠，但不负责滚动！ */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">highlight</span> { 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">background</span>: <span style="color:#ae81ff">#f6f8fa</span><span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">border-radius</span>: <span style="color:#ae81ff">6</span><span style="color:#66d9ef">px</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">1.5</span><span style="color:#66d9ef">rem</span> <span style="color:#ae81ff">0</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">relative</span>; <span style="color:#75715e">/* 按钮定位基准 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">box-shadow</span>: <span style="color:#66d9ef">none</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">border</span>: <span style="color:#66d9ef">none</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">transition</span>: <span style="color:#66d9ef">height</span> <span style="color:#ae81ff">0.3</span><span style="color:#66d9ef">s</span> <span style="color:#66d9ef">ease</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#24292e</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 关键：外层不滚动，只隐藏溢出（为了圆角和折叠） */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">overflow</span>: <span style="color:#66d9ef">hidden</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">highlight</span> { <span style="color:#66d9ef">background</span>: <span style="color:#ae81ff">#282a36</span><span style="color:#75715e">!important</span>; <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#f8f8f2</span> <span style="color:#75715e">!important</span>; }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* 折叠状态 */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">highlight</span>.<span style="color:#a6e22e">folded</span> { <span style="color:#66d9ef">height</span>: <span style="color:#ae81ff">60</span><span style="color:#66d9ef">px</span> <span style="color:#75715e">!important</span>; }
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">highlight</span>.<span style="color:#a6e22e">folded</span>::<span style="color:#a6e22e">after</span> { <span style="color:#66d9ef">content</span>:<span style="color:#e6db74">&#34;&#34;</span>; <span style="color:#66d9ef">position</span>:<span style="color:#66d9ef">absolute</span>; <span style="color:#66d9ef">bottom</span>:<span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">width</span>:<span style="color:#ae81ff">100</span><span style="color:#66d9ef">%</span>; <span style="color:#66d9ef">height</span>:<span style="color:#ae81ff">30</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">background</span>:linear-gradient(<span style="color:#66d9ef">to</span> <span style="color:#66d9ef">bottom</span>, <span style="color:#66d9ef">transparent</span>, <span style="color:#ae81ff">#f6f8fa</span>); pointer-events: <span style="color:#66d9ef">none</span>; <span style="color:#66d9ef">z-index</span>: <span style="color:#ae81ff">5</span>; }
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">highlight</span>.<span style="color:#a6e22e">folded</span>::<span style="color:#a6e22e">after</span> { <span style="color:#66d9ef">background</span>:linear-gradient(<span style="color:#66d9ef">to</span> <span style="color:#66d9ef">bottom</span>, <span style="color:#66d9ef">transparent</span>, <span style="color:#ae81ff">#282a36</span>); }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* --- 内部滚动控制 --- */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* 1. 表格模式 (lineNos=true) 的滚动控制 */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">highlight</span> <span style="color:#f92672">table</span> { 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">block</span> <span style="color:#75715e">!important</span>;       <span style="color:#75715e">/* 变成块级才能滚动 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">100</span><span style="color:#66d9ef">%</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">overflow-x</span>: <span style="color:#66d9ef">auto</span> <span style="color:#75715e">!important</span>;     <span style="color:#75715e">/* 横向滚动条在这里 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">border-spacing</span>: <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">border-collapse</span>: <span style="color:#66d9ef">collapse</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* 2. 纯代码模式 (lineNos=false) 的滚动控制 */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">highlight</span> <span style="color:#f92672">pre</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">overflow-x</span>: <span style="color:#66d9ef">auto</span> <span style="color:#75715e">!important</span>;     <span style="color:#75715e">/* 横向滚动条在这里 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">white-space</span>: <span style="color:#66d9ef">pre</span> <span style="color:#75715e">!important</span>;     <span style="color:#75715e">/* 强制不换行 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">word-wrap</span>: <span style="color:#66d9ef">normal</span> <span style="color:#75715e">!important</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">block</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> <span style="color:#ae81ff">15</span><span style="color:#66d9ef">px</span> <span style="color:#75715e">!important</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0</span> <span style="color:#75715e">!important</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">100</span><span style="color:#66d9ef">%</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* 表格内单元格样式 */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">highlight</span> <span style="color:#f92672">td</span>:<span style="color:#a6e22e">first-child</span> { 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">40</span><span style="color:#66d9ef">px</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">background</span>: <span style="color:#66d9ef">transparent</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> <span style="color:#ae81ff">0</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">user-select</span>: <span style="color:#66d9ef">none</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">vertical-align</span>: <span style="color:#66d9ef">top</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">sticky</span>; <span style="color:#75715e">/* (可选) 让行号在滚动时固定 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">left</span>: <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">z-index</span>: <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">highlight</span> <span style="color:#f92672">td</span>:<span style="color:#a6e22e">last-child</span> { 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> <span style="color:#ae81ff">15</span><span style="color:#66d9ef">px</span> <span style="color:#75715e">!important</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">100</span><span style="color:#66d9ef">%</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">vertical-align</span>: <span style="color:#66d9ef">top</span>; 
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">highlight</span> .<span style="color:#a6e22e">lnt</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#999</span><span style="color:#75715e">!important</span>; <span style="color:#66d9ef">font-size</span>: <span style="color:#ae81ff">12</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">margin-right</span>: <span style="color:#ae81ff">8</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">text-align</span>: <span style="color:#66d9ef">right</span>; <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">block</span>; }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* 按钮组 (固定在右上角) */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">code-tools</span> { 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">absolute</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">top</span>: <span style="color:#ae81ff">6</span><span style="color:#66d9ef">px</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">right</span>: <span style="color:#ae81ff">6</span><span style="color:#66d9ef">px</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">flex</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">opacity</span>: <span style="color:#ae81ff">0</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">transition</span>: <span style="color:#66d9ef">opacity</span> <span style="color:#ae81ff">0.2</span><span style="color:#66d9ef">s</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">z-index</span>: <span style="color:#ae81ff">20</span>; <span style="color:#75715e">/* 层级最高，要在滚动条上面 */</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">highlight</span>:<span style="color:#a6e22e">hover</span> .<span style="color:#a6e22e">code-tools</span> { <span style="color:#66d9ef">opacity</span>: <span style="color:#ae81ff">1</span>; }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">c-btn</span> { <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">30</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">height</span>: <span style="color:#ae81ff">30</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">background</span>: <span style="color:#66d9ef">transparent</span>; <span style="color:#66d9ef">border</span>:<span style="color:#66d9ef">none</span>; <span style="color:#66d9ef">cursor</span>:<span style="color:#66d9ef">pointer</span>; <span style="color:#66d9ef">color</span>:<span style="color:#ae81ff">#999</span>; <span style="color:#66d9ef">display</span>:<span style="color:#66d9ef">flex</span>; <span style="color:#66d9ef">justify-content</span>:<span style="color:#66d9ef">center</span>; <span style="color:#66d9ef">align-items</span>:<span style="color:#66d9ef">center</span>; <span style="color:#66d9ef">transition</span>: <span style="color:#66d9ef">all</span> <span style="color:#ae81ff">0.2</span><span style="color:#66d9ef">s</span> <span style="color:#66d9ef">ease</span>; }
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">c-btn</span>:<span style="color:#a6e22e">hover</span> { <span style="color:#66d9ef">background</span>: <span style="color:#66d9ef">transparent</span>; <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#ff4757</span>; }
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">c-btn</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#aaa</span>; }
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">c-btn</span>:<span style="color:#a6e22e">hover</span> { <span style="color:#66d9ef">background</span>: <span style="color:#66d9ef">transparent</span>; <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#ff79c6</span>; }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* ================= 3. 完整语法颜色集 (Light/Dark) ================= */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* --- 浅色模式 (Light - 默认) --- */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">k</span><span style="color:#f92672">,</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">kd</span><span style="color:#f92672">,</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">kt</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#0088ce</span>; <span style="color:#66d9ef">font-weight</span>: <span style="color:#66d9ef">bold</span>; } <span style="color:#75715e">/* 关键字 (blue) */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">s</span><span style="color:#f92672">,</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">s1</span><span style="color:#f92672">,</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">s2</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#a31515</span>; } <span style="color:#75715e">/* 字符串 (red) */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">c</span><span style="color:#f92672">,</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">c1</span><span style="color:#f92672">,</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">cm</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#888888</span>; <span style="color:#66d9ef">font-style</span>: <span style="color:#66d9ef">italic</span>; } <span style="color:#75715e">/* 注释 (grey) */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">nf</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#660066</span>; <span style="color:#66d9ef">font-weight</span>: <span style="color:#66d9ef">bold</span>; } <span style="color:#75715e">/* 函数名 */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">mi</span><span style="color:#f92672">,</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">mb</span><span style="color:#f92672">,</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">mf</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#660066</span>; } <span style="color:#75715e">/* 数字/浮点数 */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">nc</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#008080</span>; } <span style="color:#75715e">/* 类名 */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">na</span><span style="color:#f92672">,</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">nt</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#000080</span>; } <span style="color:#75715e">/* 标签/属性 */</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">nb</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#0086b3</span>; } <span style="color:#75715e">/* 内置对象/函数 */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* --- 深色模式适配 (Dracula/Neon Mix) --- */</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">k</span><span style="color:#f92672">,</span> <span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">kd</span><span style="color:#f92672">,</span> <span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">kt</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#ff79c6</span> <span style="color:#75715e">!important</span>; } <span style="color:#75715e">/* 关键字/类型: 粉色 */</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">s</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#f1fa8c</span> <span style="color:#75715e">!important</span>; } <span style="color:#75715e">/* 字符串: 黄色 */</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">c</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#6272a4</span> <span style="color:#75715e">!important</span>; } <span style="color:#75715e">/* 注释: 蓝灰 */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">nf</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#50fa7b</span> <span style="color:#75715e">!important</span>; <span style="color:#66d9ef">font-weight</span>: <span style="color:#66d9ef">bold</span>; } <span style="color:#75715e">/* 函数名: 绿色 */</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">mi</span><span style="color:#f92672">,</span> <span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">mf</span><span style="color:#f92672">,</span> <span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">mb</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#bd93f9</span> <span style="color:#75715e">!important</span>; } <span style="color:#75715e">/* 数字: 紫色 */</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">na</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#50fa7b</span> <span style="color:#75715e">!important</span>; } <span style="color:#75715e">/* 属性名: 绿色 */</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">nt</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#ff79c6</span> <span style="color:#75715e">!important</span>; } <span style="color:#75715e">/* 标签名: 粉色 */</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">html</span>.<span style="color:#a6e22e">dark</span> .<span style="color:#a6e22e">chroma</span> .<span style="color:#a6e22e">nb</span> { <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#8be9fd</span> <span style="color:#75715e">!important</span>; } <span style="color:#75715e">/* 内置对象: 浅蓝 */</span>
+</span></span></code></pre></div><h3 id="3-功能脚本">3. 功能脚本<a hidden class="anchor" aria-hidden="true" href="#3-功能脚本">#</a></h3>
+<p>包含注入 Loader HTML 的代码和复制/折叠逻辑
+新建static/js/app.js文件，内容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-JavaScript" data-lang="JavaScript"><span style="display:flex;"><span><span style="color:#75715e">// 1. 动态注入 Halo 动画 HTML
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>(<span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">loaderHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &lt;div id=&#34;halo-racer-loader&#34;&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &lt;div class=&#34;racer-container&#34;&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;div class=&#34;bar p1&#34;&gt;&lt;/div&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;div class=&#34;bar p2&#34;&gt;&lt;/div&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &lt;div class=&#34;bar red&#34;&gt;&lt;/div&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &lt;/div&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &lt;/div&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  `</span>;
+</span></span><span style="display:flex;"><span>  document.<span style="color:#a6e22e">write</span>(<span style="color:#a6e22e">loaderHTML</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 动画消失逻辑
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">loader</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">&#39;halo-racer-loader&#39;</span>);
+</span></span><span style="display:flex;"><span>  window.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;load&#39;</span>, <span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">setTimeout</span>(() =&gt; {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">loader</span>.<span style="color:#a6e22e">classList</span>.<span style="color:#a6e22e">add</span>(<span style="color:#e6db74">&#39;hidden&#39;</span>);
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">setTimeout</span>(() =&gt; { <span style="color:#a6e22e">loader</span>.<span style="color:#a6e22e">style</span>.<span style="color:#a6e22e">display</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;none&#39;</span>; }, <span style="color:#ae81ff">300</span>);
+</span></span><span style="display:flex;"><span>    }, <span style="color:#ae81ff">1000</span>); 
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>})();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 2. 代码块按钮逻辑 (智能默认折叠 + 复制)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">attachCodeBlockTools</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">svgCopy</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&lt;svg viewBox=&#34;0 0 24 24&#34; width=&#34;14&#34; height=&#34;14&#34; fill=&#34;currentColor&#34;&gt;&lt;path d=&#34;M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z&#34;/&gt;&lt;/svg&gt;&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">svgCheck</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&lt;svg viewBox=&#34;0 0 24 24&#34; width=&#34;14&#34; height=&#34;14&#34; fill=&#34;currentColor&#34;&gt;&lt;path d=&#34;M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z&#34;/&gt;&lt;/svg&gt;&#39;</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 箭头向上（折叠图标）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">svgFold</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&lt;svg viewBox=&#34;0 0 24 24&#34; width=&#34;14&#34; height=&#34;14&#34; fill=&#34;currentColor&#34;&gt;&lt;path d=&#34;M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z&#34;/&gt;&lt;/svg&gt;&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 箭头向下（展开图标）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">svgUnfold</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&lt;svg viewBox=&#34;0 0 24 24&#34; width=&#34;14&#34; height=&#34;14&#34; fill=&#34;currentColor&#34;&gt;&lt;path d=&#34;M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z&#34;/&gt;&lt;/svg&gt;&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">codeBlocks</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelectorAll</span>(<span style="color:#e6db74">&#39;.highlight&#39;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">codeBlocks</span>.<span style="color:#a6e22e">length</span> <span style="color:#f92672">===</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">codeBlocks</span>.<span style="color:#a6e22e">forEach</span>(<span style="color:#a6e22e">block</span> =&gt; {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">block</span>.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;.code-tools&#39;</span>)) <span style="color:#66d9ef">return</span>; 
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">tools</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;div&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tools</span>.<span style="color:#a6e22e">className</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;code-tools&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// --- 折叠按钮逻辑 ---
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">btnFold</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;button&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">btnFold</span>.<span style="color:#a6e22e">className</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;c-btn&#39;</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 【核心修改】智能判断：如果代码高度超过 150px，则默认折叠
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#75715e">// 您可以修改这个数字：150 代表约 6-7 行代码的高度
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">threshold</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">150</span>; 
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">isFolded</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">block</span>.<span style="color:#a6e22e">offsetHeight</span> <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">threshold</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isFolded</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">block</span>.<span style="color:#a6e22e">classList</span>.<span style="color:#a6e22e">add</span>(<span style="color:#e6db74">&#39;folded&#39;</span>);   <span style="color:#75715e">// 添加CSS折叠类
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#a6e22e">btnFold</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">svgUnfold</span>;   <span style="color:#75715e">// 显示&#34;向下展开&#34;图标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#a6e22e">btnFold</span>.<span style="color:#a6e22e">title</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;展开代码&#34;</span>;
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">btnFold</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">svgFold</span>;     <span style="color:#75715e">// 显示&#34;向上折叠&#34;图标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#a6e22e">btnFold</span>.<span style="color:#a6e22e">title</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;折叠代码&#34;</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">btnFold</span>.<span style="color:#a6e22e">onclick</span> <span style="color:#f92672">=</span> () =&gt; {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">isFolded</span> <span style="color:#f92672">=</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">isFolded</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">block</span>.<span style="color:#a6e22e">classList</span>.<span style="color:#a6e22e">toggle</span>(<span style="color:#e6db74">&#39;folded&#39;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 切换图标：折叠时显示&#34;展开(下箭头)&#34;，展开时显示&#34;折叠(上箭头)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#a6e22e">btnFold</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">isFolded</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">svgUnfold</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">svgFold</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">btnFold</span>.<span style="color:#a6e22e">title</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">isFolded</span> <span style="color:#f92672">?</span> <span style="color:#e6db74">&#34;展开代码&#34;</span> <span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;折叠代码&#34;</span>;
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// --- 复制按钮逻辑 ---
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">btnCopy</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;button&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">btnCopy</span>.<span style="color:#a6e22e">className</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;c-btn&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">btnCopy</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">svgCopy</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">btnCopy</span>.<span style="color:#a6e22e">title</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;复制&#34;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">btnCopy</span>.<span style="color:#a6e22e">onclick</span> <span style="color:#f92672">=</span> () =&gt; {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">codeElement</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">block</span>.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;td:last-child pre code&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#a6e22e">block</span>.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;code&#39;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">codeText</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">codeElement</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">codeElement</span>.<span style="color:#a6e22e">innerText</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">block</span>.<span style="color:#a6e22e">innerText</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">navigator</span>.<span style="color:#a6e22e">clipboard</span>.<span style="color:#a6e22e">writeText</span>(<span style="color:#a6e22e">codeText</span>).<span style="color:#a6e22e">then</span>(() =&gt; {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">btnCopy</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">svgCheck</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">btnCopy</span>.<span style="color:#a6e22e">style</span>.<span style="color:#a6e22e">color</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;#4caf50&#39;</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">setTimeout</span>(() =&gt; { 
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">btnCopy</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">svgCopy</span>; 
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">btnCopy</span>.<span style="color:#a6e22e">style</span>.<span style="color:#a6e22e">color</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>; 
+</span></span><span style="display:flex;"><span>                }, <span style="color:#ae81ff">2000</span>);
+</span></span><span style="display:flex;"><span>            });
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tools</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">btnFold</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">tools</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">btnCopy</span>);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 插入到代码块最前面
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#a6e22e">block</span>.<span style="color:#a6e22e">insertBefore</span>(<span style="color:#a6e22e">tools</span>, <span style="color:#a6e22e">block</span>.<span style="color:#a6e22e">firstChild</span>);
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 监听 DOM 加载
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>document.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;DOMContentLoaded&#39;</span>, <span style="color:#a6e22e">attachCodeBlockTools</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 兜底超时
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">setTimeout</span>(<span style="color:#66d9ef">function</span>() { 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">loader</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">&#39;halo-racer-loader&#39;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">loader</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">loader</span>.<span style="color:#a6e22e">classList</span>.<span style="color:#a6e22e">contains</span>(<span style="color:#e6db74">&#39;hidden&#39;</span>)) <span style="color:#a6e22e">loader</span>.<span style="color:#a6e22e">classList</span>.<span style="color:#a6e22e">add</span>(<span style="color:#e6db74">&#39;hidden&#39;</span>); 
+</span></span><span style="display:flex;"><span>}, <span style="color:#ae81ff">5000</span>);
+</span></span></code></pre></div><h3 id="4-背面内容">4. 背面内容<a hidden class="anchor" aria-hidden="true" href="#4-背面内容">#</a></h3>
+<p>新建layouts/partials/back.html文件，内容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;dream-grid dream-grid-about&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">article</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;card bg-base-100 shadow-xl dark:border dark:border-base-content/30&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;card-body&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;card-title&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>          &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/about&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;hover:underline&#34;</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text-decoration: none;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>            关于我 &lt;<span style="color:#f92672">ion-icon</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;arrow-forward-outline&#34;</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;font-size: 0.8em; opacity: 0.5;&#34;</span>&gt;&lt;/<span style="color:#f92672">ion-icon</span>&gt;
+</span></span><span style="display:flex;"><span>          &lt;/<span style="color:#f92672">a</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;prose dark:prose-invert&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>          &lt;<span style="color:#f92672">p</span>&gt;{{ site.Params.description | markdownify }}&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>          &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;margin-top: 15px;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/about&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;btn btn-sm btn-primary&#34;</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text-decoration: none;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>              查看详细介绍
+</span></span><span style="display:flex;"><span>            &lt;/<span style="color:#f92672">a</span>&gt;
+</span></span><span style="display:flex;"><span>          &lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">article</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">article</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;card bg-base-100 shadow-xl dark:border dark:border-base-content/30&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;card-body&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;card-title&#34;</span>&gt;社交链接&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#f92672">ul</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;menu menu-horizontal flex-wrap w-full px-0&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>          
+</span></span><span style="display:flex;"><span>          {{ range site.Params.navItems }}
+</span></span><span style="display:flex;"><span>            {{/* 排除 home/about 这两个内部链接 */}}
+</span></span><span style="display:flex;"><span>            {{ if ne .title &#34;首页&#34; }} 
+</span></span><span style="display:flex;"><span>              {{ if ne .title &#34;关于&#34; }}
+</span></span><span style="display:flex;"><span>              &lt;<span style="color:#f92672">li</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ .href }}&#34;</span> <span style="color:#a6e22e">target</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_blank&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ .title }}&#34;</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;font-size: 1.5rem;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                  &lt;<span style="color:#f92672">ion-icon</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ .icon }}&#34;</span>&gt;&lt;/<span style="color:#f92672">ion-icon</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#f92672">a</span>&gt;
+</span></span><span style="display:flex;"><span>              &lt;/<span style="color:#f92672">li</span>&gt;
+</span></span><span style="display:flex;"><span>              {{ end }}
+</span></span><span style="display:flex;"><span>            {{ end }}
+</span></span><span style="display:flex;"><span>          {{ end }}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#f92672">ul</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">article</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span></code></pre></div><h3 id="5-隐藏页面社交图标">5. 隐藏页面社交图标<a hidden class="anchor" aria-hidden="true" href="#5-隐藏页面社交图标">#</a></h3>
+<p>新建layouts/partials/share.html文件，内容空白</p>
+<h3 id="6-底部powered-by信息修改">6. 底部Powered by信息修改<a hidden class="anchor" aria-hidden="true" href="#6-底部powered-by信息修改">#</a></h3>
+<p>复制主题里的footerLeft.html至相应文件夹，也就是layouts/partials/footerLeft.html，修改相应内容</p>
+<h3 id="总结创建覆盖的方式以到达所需功能">总结：创建/覆盖的方式以到达所需功能。<a hidden class="anchor" aria-hidden="true" href="#总结创建覆盖的方式以到达所需功能">#</a></h3>
+<h2 id="五编写文章">五、编写文章<a hidden class="anchor" aria-hidden="true" href="#五编写文章">#</a></h2>
+<h3 id="1-生成文章文件">1. 生成文章文件<a hidden class="anchor" aria-hidden="true" href="#1-生成文章文件">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo new content posts/my-first-post.md
+</span></span></code></pre></div><h2 id="六github-pages部署推送">六、GitHub Pages部署推送<a hidden class="anchor" aria-hidden="true" href="#六github-pages部署推送">#</a></h2>
+<p>使用 GitHub Pages 是最经典、也是最“原教旨主义”的静态博客托管方式。完全免费，而且极其稳定。</p>
+<p>既然您选择用 GitHub Pages，我们需要稍微调整一下策略。现在的 GitHub Pages 已经进化了，不需要您在本地手动生成 public 文件夹再上传，而是直接上传源码，让 GitHub 帮您自动生成和发布（利用 GitHub Actions）。</p>
+<p>请按照这 4 步 稳扎稳打：</p>
+<h3 id="1-创建专用仓库-repository">1. 创建专用仓库 (Repository)<a hidden class="anchor" aria-hidden="true" href="#1-创建专用仓库-repository">#</a></h3>
+<p>这是最关键的一步，名字不能乱起。</p>
+<ul>
+<li>
+<p>登录 GitHub。</p>
+</li>
+<li>
+<p>点击右上角 + -&gt; New repository。</p>
+</li>
+<li>
+<p>Repository name (仓库名)：</p>
+<ul>
+<li>
+<p>必须写成： 您的GitHub用户名.github.io</p>
+</li>
+<li>
+<p>例如：如果您的用户名是 xuhxjx，仓库名必须是 xuhxjx.github.io。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Privacy：必须选 Public (公开)。（免费版 GitHub Pages 只能用于公开仓库）。</p>
+</li>
+<li>
+<p>点击 Create repository。</p>
+</li>
+</ul>
+<h3 id="2-修改-hugotoml-的-baseurl">2. 修改 hugo.toml 的 BaseURL<a hidden class="anchor" aria-hidden="true" href="#2-修改-hugotoml-的-baseurl">#</a></h3>
+<p>GitHub Pages 对网址非常敏感，必须配置正确。</p>
+<p>请打开 VS Code 里的 hugo.toml，修改第一行：</p>
+<pre tabindex="0"><code class="language-Ini," data-lang="Ini,"># 把这里改成您刚才创建的仓库名地址
+# 注意：一定要以 / 结尾
+baseURL = &#34;https://您的用户名.github.io/&#34;
+</code></pre><h3 id="3-上传源码-git-推送">3. 上传源码 (Git 推送)<a hidden class="anchor" aria-hidden="true" href="#3-上传源码-git-推送">#</a></h3>
+<p>回到 VS Code，打开终端（Terminal），依次输入以下命令（把源码推送到 GitHub）：</p>
+<p>(注意：请确保您把之前的 public 和 resources 文件夹删了，我们要传的是干净的源码)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 1. 初始化 Git (如果之前做过，这步会提示已存在，没关系)</span>
+</span></span><span style="display:flex;"><span>git init
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 把所有文件加入暂存区</span>
+</span></span><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 提交说明</span>
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;我的博客第一次提交&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. 关联远程仓库 (请把下面的地址换成您刚才创建的仓库地址)</span>
+</span></span><span style="display:flex;"><span>git remote add origin https://github.com/您的用户名/您的用户名.github.io.git
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 5. 推送到 GitHub</span>
+</span></span><span style="display:flex;"><span>git branch -M main
+</span></span><span style="display:flex;"><span>git push -u origin main
+</span></span></code></pre></div><p>如果报错GitHub发现操作者 (xuhxjx) 不是仓库主人 (hxjxtwg)，所以直接 403 禁止访问。由于之前有hexo博客用的ssh方式推送，现在需要删除旧凭证。
+你需要让电脑“忘掉”旧账号 xuhxjx，然后重新登录新账号 hxjxtwg。</p>
+<p>请按照以下3步操作（Windows 系统）：</p>
+<p>第一步：打开“凭据管理器”</p>
+<ul>
+<li>
+<p>按键盘上的 Win 键（开始菜单）。</p>
+</li>
+<li>
+<p>直接打字搜索：凭据管理器 (或者搜 Credential Manager)。</p>
+</li>
+<li>
+<p>点击打开它。</p>
+</li>
+</ul>
+<p>第二步：删除旧的 GitHub 凭据</p>
+<ul>
+<li>
+<p>在弹出的窗口里，点击 “Windows 凭据” (Windows Credentials)。</p>
+</li>
+<li>
+<p>在下面的列表中找到 git:https://github.com 这一行。</p>
+</li>
+<li>
+<p>点击它展开，然后点击 “删除” (Remove)。 (如果有多个关于 github 的，统统删掉)</p>
+</li>
+</ul>
+<p>这会导致：您刚登录了 Hugo 的账号，再去推 Hexo 时，电脑会自动用 Hugo 的账号去试，结果报错（403 禁止访问），然后您就得删凭据、重新登录……确实会非常崩溃。
+但是！有一个**“一行代码”**的魔法设置，可以让 Windows “按仓库” 记住密码，而不是“按网站”记。这样两个账号就能完美共存，互不打架！</p>
+<p>请按照下面 2 步 设置即可：
+第一步：开启“独立记忆”模式（核心魔法）
+请打开终端（CMD 或 VS Code 终端），输入下面这行命令并回车：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git config --global credential.useHttpPath true
+</span></span></code></pre></div><p>这行命令的作用： 告诉电脑：“以后记住密码的时候，不要只记 github.com，要连后面的仓库名一起记（比如 github.com/xuhxjx/blog 和 github.com/hxjxtwg/blog 分开记）”。</p>
+<p>这样，两个博客就会分别保存两套不同的账号密码，井水不犯河水。
+现在我们设置新的帐号密码推送hugo</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git config user.name <span style="color:#e6db74">&#34;hxjxtwg&#34;</span>
+</span></span><span style="display:flex;"><span>git config user.email <span style="color:#e6db74">&#34;您的Hugo新邮箱&#34;</span>
+</span></span></code></pre></div><p>正式推送 (登录新号)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git push -u origin main
+</span></span></code></pre></div><p>###关键时刻：</p>
+<p>此时屏幕会弹出一个 GitHub 的登录框（或者浏览器弹窗）。</p>
+<p>请务必在这个弹窗里，登录您的新账号 hxjxtwg！</p>
+<p>(千万别顺手登成旧账号了)</p>
+<p>登录成功后，终端会显示写入进度 Writing objects: 100%，最后显示 &hellip; set up to track remote branch &hellip;。</p>
+<p>只要不报错，您的 Hugo 博客源码就成功上传了！</p>
+<h2 id="七github源代码生成网页">七、github源代码生成网页<a hidden class="anchor" aria-hidden="true" href="#七github源代码生成网页">#</a></h2>
+<p>上传的是 Hugo 的“源代码”（也就是那一堆配置文件和 Markdown），而不是最终生成的 网页文件 (index.html)。GitHub 现在看着您的源码一脸懵逼，不知道该显示什么。</p>
+<p>我们需要去 GitHub 仓库里按一个开关，告诉它：“嗨，这是 Hugo 项目，请帮我自动生成并发布网页！”</p>
+<h3 id="1-开启自动化构建-github-actions">1. 开启自动化构建 (GitHub Actions)<a hidden class="anchor" aria-hidden="true" href="#1-开启自动化构建-github-actions">#</a></h3>
+<ul>
+<li>
+<p>登录 GitHub，打开您的仓库页面：hxjxtwg/hxjxtwg.github.io</p>
+</li>
+<li>
+<p>点击顶部导航栏最右边的 Settings (设置)。</p>
+</li>
+<li>
+<p>在左侧边栏找到并点击 Pages。</p>
+</li>
+<li>
+<p>关键操作： 在 &ldquo;Build and deployment&rdquo; (构建与部署) 区域：</p>
+<ul>
+<li>把 Source (来源) 从 Deploy from a branch 改成 👉 GitHub Actions。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-选择-hugo-模板">2. 选择 Hugo 模板<a hidden class="anchor" aria-hidden="true" href="#2-选择-hugo-模板">#</a></h3>
+<ul>
+<li>
+<p>改成 GitHub Actions 后，下方会出现一排推荐的框框。</p>
+</li>
+<li>
+<p>找到写着 &ldquo;Hugo&rdquo; 的那个框（如果没有，就点击 &ldquo;Browse all workflows&rdquo; 搜 Hugo）。</p>
+</li>
+<li>
+<p>点击 Configure (配置) 按钮。</p>
+</li>
+<li>
+<p>GitHub 会给您展示一个全是代码的页面（这是自动构建脚本），您什么都不用改。</p>
+</li>
+<li>
+<p>直接点击右上角的绿色按钮 Commit changes&hellip;。</p>
+</li>
+<li>
+<p>再点一次 Commit changes 确认。</p>
+</li>
+</ul>
+<h3 id="3-等待绿灯亮起">3. 等待绿灯亮起<a hidden class="anchor" aria-hidden="true" href="#3-等待绿灯亮起">#</a></h3>
+<ul>
+<li>
+<p>提交后，点击仓库顶部的 Actions 标签页。</p>
+</li>
+<li>
+<p>您会看到有一个任务正在转圈圈（黄色），这是 GitHub 正在帮您生成网页。</p>
+</li>
+<li>
+<p>等大概 30秒 到 1分钟，圈圈变成 绿色对号 ✅。</p>
+</li>
+<li>
+<p>这时候，再去刷新您的网址 <a href="https://hxjxtwg.github.io">https://hxjxtwg.github.io</a>，博客就出来了！</p>
+</li>
+</ul>
+<h2 id="八hugo-博客日常写文章流程">八、Hugo 博客日常写文章流程<a hidden class="anchor" aria-hidden="true" href="#八hugo-博客日常写文章流程">#</a></h2>
+<h3 id="1-新建文章">1. 新建文章<a hidden class="anchor" aria-hidden="true" href="#1-新建文章">#</a></h3>
+<p>在 VS Code 终端输入：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo new content posts/您的文章文件名.md
+</span></span></code></pre></div><h3 id="2-编辑内容">2. 编辑内容：<a hidden class="anchor" aria-hidden="true" href="#2-编辑内容">#</a></h3>
+<ul>
+<li>
+<p>打开生成的 .md 文件。</p>
+</li>
+<li>
+<p>重要： 记得把 draft: true 改成 false（或者直接删掉这一行），否则发上去也不显示。</p>
+</li>
+<li>
+<p>写完正文。</p>
+</li>
+</ul>
+<h3 id="3-本地预览可选推荐-输入-hugo-server在本地-localhost1313-看看效果好不好">3. 本地预览（可选，推荐）： 输入 hugo server，在本地 localhost:1313 看看效果好不好。<a hidden class="anchor" aria-hidden="true" href="#3-本地预览可选推荐-输入-hugo-server在本地-localhost1313-看看效果好不好">#</a></h3>
+<h3 id="发布上线三连击-确认没问题后在终端依次输入">发布上线（三连击）： 确认没问题后，在终端依次输入：<a hidden class="anchor" aria-hidden="true" href="#发布上线三连击-确认没问题后在终端依次输入">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;写了一篇新文章&#34;</span>
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><p>输入完 git push 后，等待 1-2 分钟，GitHub 会自动帮您构建并更新网页</p>
+<p>###双博客切换指南
+推 Hugo 时：在 Hugo 文件夹里，直接用 git push（电脑会自动用新账号）。</p>
+<p>推 Hexo 时：在 Hexo 文件夹里，直接用 hexo d（电脑会自动用旧账号的 SSH）。</p>
+<h2 id="九部署到平台">九、部署到平台<a hidden class="anchor" aria-hidden="true" href="#九部署到平台">#</a></h2>
+<h3 id="第一步部署到-vercel-最快几秒钟">第一步：部署到 Vercel (最快，几秒钟)<a hidden class="anchor" aria-hidden="true" href="#第一步部署到-vercel-最快几秒钟">#</a></h3>
+<h3 id="1打开-vercel-官网-并登录直接用-github-账号登录">1.打开 Vercel 官网 并登录（直接用 GitHub 账号登录）。<a hidden class="anchor" aria-hidden="true" href="#1打开-vercel-官网-并登录直接用-github-账号登录">#</a></h3>
+<h3 id="2-点击控制台右上角的-add-new----project">2. 点击控制台右上角的 “Add New &hellip;” -&gt; “Project”。<a hidden class="anchor" aria-hidden="true" href="#2-点击控制台右上角的-add-new----project">#</a></h3>
+<h3 id="3-在左侧列表里找到你的仓库-hxjxtwghxjxtwggithubio点击-import">3. 在左侧列表里找到你的仓库 hxjxtwg/hxjxtwg.github.io，点击 “Import”。<a hidden class="anchor" aria-hidden="true" href="#3-在左侧列表里找到你的仓库-hxjxtwghxjxtwggithubio点击-import">#</a></h3>
+<h3 id="4-配置页面关键点">4. 配置页面（关键点）：<a hidden class="anchor" aria-hidden="true" href="#4-配置页面关键点">#</a></h3>
+<ul>
+<li>
+<p>Framework Preset: Vercel 通常会自动识别为 Hugo。如果没识别，手动选一下 Hugo。</p>
+</li>
+<li>
+<p>Root Directory: 保持默认（.）。</p>
+</li>
+<li>
+<p>Build Command: 保持默认。</p>
+</li>
+</ul>
+<h3 id="5-点击-deploy">5. 点击 “Deploy”。<a hidden class="anchor" aria-hidden="true" href="#5-点击-deploy">#</a></h3>
+<p>等待几十秒，撒花！🎉 你的博客就在 Vercel 上线了（会分配一个 xxx.vercel.app 的域名）。</p>
+<h3 id="第二步部署到-cloudflare-pages-速度最快不限流量">第二步：部署到 Cloudflare Pages (速度最快，不限流量)<a hidden class="anchor" aria-hidden="true" href="#第二步部署到-cloudflare-pages-速度最快不限流量">#</a></h3>
+<h3 id="1-打开-cloudflare-官网-并登录">1. 打开 Cloudflare 官网 并登录。<a hidden class="anchor" aria-hidden="true" href="#1-打开-cloudflare-官网-并登录">#</a></h3>
+<h3 id="2-在左侧菜单点击-workers--pages">2. 在左侧菜单点击 “Workers &amp; Pages”。<a hidden class="anchor" aria-hidden="true" href="#2-在左侧菜单点击-workers--pages">#</a></h3>
+<h3 id="3-点击右边的蓝色按钮-create-创建">3. 点击右边的蓝色按钮 “Create” (创建)。<a hidden class="anchor" aria-hidden="true" href="#3-点击右边的蓝色按钮-create-创建">#</a></h3>
+<h3 id="4-选择-pages-标签页---点击-connect-to-git">4. 选择 “Pages” 标签页 -&gt; 点击 “Connect to Git”。<a hidden class="anchor" aria-hidden="true" href="#4-选择-pages-标签页---点击-connect-to-git">#</a></h3>
+<h3 id="5-选择-github-登录并授权它访问你的仓库">5. 选择 GitHub 登录，并授权它访问你的仓库。<a hidden class="anchor" aria-hidden="true" href="#5-选择-github-登录并授权它访问你的仓库">#</a></h3>
+<h3 id="6-在列表中选择-hxjxtwggithubio点击-begin-setup">6. 在列表中选择 hxjxtwg.github.io，点击 “Begin setup”。<a hidden class="anchor" aria-hidden="true" href="#6-在列表中选择-hxjxtwggithubio点击-begin-setup">#</a></h3>
+<h3 id="7-配置页面关键点">7. 配置页面（关键点）：<a hidden class="anchor" aria-hidden="true" href="#7-配置页面关键点">#</a></h3>
+<ul>
+<li>
+<p>Project name: 随便起（比如 my-blog）。</p>
+</li>
+<li>
+<p>Production branch: 选 main。</p>
+</li>
+<li>
+<p>Framework preset (框架预设): 一定要选 Hugo (这一步很重要，不选会失败)。</p>
+</li>
+</ul>
+<h3 id="8-点击-save-and-deploy">8. 点击 “Save and Deploy”。<a hidden class="anchor" aria-hidden="true" href="#8-点击-save-and-deploy">#</a></h3>
+<p>等待一两分钟，搞定！🎉 你的博客也在 Cloudflare 上线了（分配 xxx.pages.dev 域名）。</p>
+<p>⚠️ 唯一需要注意的小问题：baseURL
+你的 hugo.toml 里写死了： baseURL = &ldquo;<a href="https://hxjxtwg.github.io/%22">https://hxjxtwg.github.io/&quot;</a></p>
+<p>这会导致一个现象：</p>
+<ul>
+<li>
+<p>你在 Vercel 或 Cloudflare 打开网站，看起来是正常的。</p>
+</li>
+<li>
+<p>但是如果你点击网页上的 “首页” 按钮，或者某些内部链接，它可能会跳回 hxjxtwg.github.io（因为配置文件里写死在那了）。</p>
+</li>
+</ul>
+<p>✅ 解决方法（进阶）： 如果你希望这三个网站各自独立，互不跳转，你需要让 Hugo 能够根据环境自动改变 baseURL。</p>
+<p>最简单的改法（推荐）： 把 hugo.toml 里的 baseURL 改成 相对路径（但这取决于 Dream 主题是否支持）：</p>
+<pre tabindex="0"><code class="language-Ini," data-lang="Ini,">baseURL = &#34;/&#34;
+</code></pre><p>(如果改成 / 后发现样式乱了，那就只能改回去，忍受一下跳转，或者只用一个主平台)。</p>
+<h4 id="如果本地与github文件不符需强制推送force-push">如果本地与github文件不符，需强制推送（Force Push）<a hidden class="anchor" aria-hidden="true" href="#如果本地与github文件不符需强制推送force-push">#</a></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git push -f origin main
+</span></span></code></pre></div><h2 id="十本地工作流文件">十、本地工作流文件<a hidden class="anchor" aria-hidden="true" href="#十本地工作流文件">#</a></h2>
+<p>由于推送的问题，最好在本地自建工作流文件</p>
+<h3 id="1新建工作流文件夹">1.新建工作流文件夹<a hidden class="anchor" aria-hidden="true" href="#1新建工作流文件夹">#</a></h3>
+<p>请在您的博客根目录 D:\Tools\blog\hugo\ 下：</p>
+<ul>
+<li>
+<p>新建一个文件夹，命名为 .github (注意前面有个点)。</p>
+</li>
+<li>
+<p>在 .github 文件夹里，再新建一个文件夹，命名为 workflows。</p>
+</li>
+<li>
+<p>在 workflows 文件夹里，新建一个文件，命名为 hugo.yaml。</p>
+</li>
+</ul>
+<p>完整路径： D:\Tools\blog\hugo.github\workflows\hugo.yaml</p>
+<h3 id="2-填入自动构建脚本">2. 填入自动构建脚本<a hidden class="anchor" aria-hidden="true" href="#2-填入自动构建脚本">#</a></h3>
+<p>打开这个 hugo.yaml 文件，粘贴下面这段标准代码。 (这段代码告诉 GitHub：每次有更新，就安装 Hugo，下载主题，生成网页，然后发布。)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-YAML" data-lang="YAML"><span style="display:flex;"><span><span style="color:#75715e"># Sample workflow for building and deploying a Hugo site to GitHub Pages</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy Hugo site to Pages</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">on</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Runs on pushes targeting the default branch</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">push</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">branches</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Allows you to run this workflow manually from the Actions tab</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">workflow_dispatch</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">permissions</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">contents</span>: <span style="color:#ae81ff">read</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">pages</span>: <span style="color:#ae81ff">write</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">id-token</span>: <span style="color:#ae81ff">write</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">concurrency</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">group</span>: <span style="color:#e6db74">&#34;pages&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cancel-in-progress</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Default to bash</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">defaults</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">run</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">shell</span>: <span style="color:#ae81ff">bash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">jobs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Build job</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">build</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">env</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">HUGO_VERSION</span>: <span style="color:#ae81ff">0.128.0</span> <span style="color:#75715e"># 指定 Hugo 版本，比较稳定</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Install Hugo CLI</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &amp;&amp; sudo dpkg -i ${{ runner.temp }}/hugo.deb</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Checkout</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v4</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">submodules</span>: <span style="color:#ae81ff">recursive</span> <span style="color:#75715e"># 关键：一定要下载主题子模块，否则样式会乱</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">fetch-depth</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Setup Pages</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">pages</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/configure-pages@v5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Install Node.js dependencies</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: <span style="color:#e6db74">&#34;[[ -f package-lock.json || -f npm-shrinkwrap.json ]] &amp;&amp; npm ci || true&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build with Hugo</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">env</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># For maximum backward compatibility with Hugo modules</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">HUGO_ENVIRONMENT</span>: <span style="color:#ae81ff">production</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">HUGO_ENV</span>: <span style="color:#ae81ff">production</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          hugo \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            --gc \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            --minify \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            --baseURL &#34;${{ steps.pages.outputs.base_url }}/&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Upload artifact</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/upload-pages-artifact@v3</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">path</span>: <span style="color:#ae81ff">./public</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Deployment job</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">deploy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">github-pages</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">url</span>: <span style="color:#ae81ff">${{ steps.deployment.outputs.page_url }}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">needs</span>: <span style="color:#ae81ff">build</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy to GitHub Pages</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">deployment</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/deploy-pages@v4</span>
+</span></span></code></pre></div><h3 id="3-推送到-github">3. 推送到 GitHub<a hidden class="anchor" aria-hidden="true" href="#3-推送到-github">#</a></h3>
+<p>文件建好了，我们要把它传上去，让 GitHub 重新识别到它。</p>
+<p>在终端输入：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-BASH" data-lang="BASH"><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;恢复 GitHub Actions 自动部署文件&#34;</span>
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><p>✅ 验证是否恢复</p>
+<ul>
+<li>
+<p>推送完成后，打开您的 GitHub 仓库网页。</p>
+</li>
+<li>
+<p>点击顶部的 Actions 标签。</p>
+</li>
+<li>
+<p>您应该能看到一个新的工作流 &ldquo;Deploy Hugo site to Pages&rdquo; 正在运行（黄色转圈）。</p>
+</li>
+<li>
+<p>等它变成 绿色对号 ✅，您的博客就自动更新成功了！</p>
+</li>
+</ul>
+<p>以后只要您本地 git push，这个文件就会指挥 GitHub 自动干活，再也不会丢了！</p>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="//localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="//localhost:1313/">我的博客</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

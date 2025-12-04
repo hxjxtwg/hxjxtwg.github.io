@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Docker Compose部署服务与caddy反代 | 我的博客</title>
+<meta name="keywords" content="技术">
+<meta name="description" content="Docker Compose部署服务与caddy反代 - 我的博客">
+<meta name="author" content="xxsky">
+<link rel="canonical" href="//localhost:1313/posts/docker-compose%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1%E4%B8%8Ecaddy%E5%8F%8D%E4%BB%A3/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.fd5566c526ae48aadabd950798a2dc3568536401560eae5caac3765a42a9e7b5.css" integrity="sha256-/VVmxSauSKravZUHmKLcNWhTZAFWDq5cqsN2WkKp57U=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/docker-compose%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1%E4%B8%8Ecaddy%E5%8F%8D%E4%BB%A3/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="//localhost:1313/" accesskey="h" title="我的博客 (Alt + H)">我的博客</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="//localhost:1313/" title="首页">
+                    <span>首页</span>
+                </a>
+            </li>
+            <li>
+                <a href="//localhost:1313/posts/" title="文章">
+                    <span>文章</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Docker Compose部署服务与caddy反代
+    </h1>
+    <div class="post-meta"><span title='2025-12-03 21:26:38 +0800 CST'>December 3, 2025</span>&nbsp;·&nbsp;<span>xxsky</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="docker环境安装">docker环境安装<a hidden class="anchor" aria-hidden="true" href="#docker环境安装">#</a></h2>
+<h3 id="1-docker-官方一键安装脚本">1. Docker 官方一键安装脚本:<a hidden class="anchor" aria-hidden="true" href="#1-docker-官方一键安装脚本">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -fsSL https://get.docker.com -o get-docker.sh
+</span></span><span style="display:flex;"><span>sudo sh get-docker.sh
+</span></span></code></pre></div><h3 id="2-验证安装">2. 验证安装：<a hidden class="anchor" aria-hidden="true" href="#2-验证安装">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker version
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose version
+</span></span></code></pre></div><h2 id="反代配置">反代配置<a hidden class="anchor" aria-hidden="true" href="#反代配置">#</a></h2>
+<h3 id="1-为域名添加a或aaaa记录">1. 为域名添加A或AAAA记录<a hidden class="anchor" aria-hidden="true" href="#1-为域名添加a或aaaa记录">#</a></h3>
+<h3 id="2一键配置caddyfile">2.一键配置Caddyfile<a hidden class="anchor" aria-hidden="true" href="#2一键配置caddyfile">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; Caddyfile <span style="color:#e6db74">&lt;&lt;EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># Komari面板的反向代理配置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">km.hxjx.hidns.co {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    reverse_proxy komari:25774
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 哪吒面板的反向代理配置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">nz.hxjx.hidns.co {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    reverse_proxy nezha:8008
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># Openlist的反向代理配置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">openlist.hxjx.hidns.co {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    reverse_proxy openlist:5244
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># Typecho博客的反向代理配置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">blog.aibomart.com {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    reverse_proxy typecho:80
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span></code></pre></div><h2 id="安装与配置">安装与配置<a hidden class="anchor" aria-hidden="true" href="#安装与配置">#</a></h2>
+<h3 id="1-一键生成docker-composeyml">1. 一键生成docker-compose.yml<a hidden class="anchor" aria-hidden="true" href="#1-一键生成docker-composeyml">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; docker-compose.yml <span style="color:#e6db74">&lt;&lt;EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">services:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  caddy:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    image: caddy:latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    container_name: caddy
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ports:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - &#34;80:80&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - &#34;443:443&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - &#34;443:443/udp&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    volumes:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ./Caddyfile:/etc/caddy/Caddyfile
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ./caddy_data:/data 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    restart: unless-stopped
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  nezha:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    image: ghcr.io/nezhahq/nezha:latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    container_name: nezha
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ports:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - &#34;8008:8008&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    volumes:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ./nezha_data:/dashboard/data 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    restart: unless-stopped
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  openlist:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    image: openlistteam/openlist:latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    container_name: openlist
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    user: &#39;0:0&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ports:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - &#34;5244:5244&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    environment:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - TZ=Asia/Shanghai
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - UMASK=022
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - OPENLIST_ADMIN_PASSWORD=xxsky1127 # 请务必修改
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    volumes:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ./oplist_data:/opt/openlist/data 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    restart: unless-stopped
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  komari:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    image: ghcr.io/komari-monitor/komari:latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    container_name: komari
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ports:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - &#34;25774:25774&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    environment:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - TZ=Asia/Shanghai
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ADMIN_USERNAME=admin
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ADMIN_PASSWORD=xxsky1127
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    volumes:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ./komari_data:/app/data 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    restart: unless-stopped
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  # Typecho 博客服务
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  typecho:  
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    image: joyqi/typecho:nightly-php8.2-apache  # 官方 Apache 镜像
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    container_name: typecho
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ports:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - &#34;8383:80&#34;  # 宿主机 8080 -&gt; 容器 80
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    environment:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      TZ: Asia/Shanghai  # 设置时区为上海
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    volumes:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ./typecho/app/usr:/app/usr  # 当前目录存放 Typecho 文件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    depends_on:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - db  # 依赖数据库
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    restart: always  # 自动重启策略
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  # 数据库服务
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  db:  
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    image: mariadb:10.6  # MariaDB 镜像
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    container_name: typecho-db
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    environment:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      MYSQL_ROOT_PASSWORD: xxsky1127  # 数据库 root 密码（请修改）
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      MYSQL_DATABASE: typecho  # 默认数据库
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      MYSQL_USER: typecho  # 数据库用户
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      MYSQL_PASSWORD: xxsky1127  # 用户密码（请修改）
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      TZ: Asia/Shanghai  # 时区
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    volumes:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ./db:/var/lib/mysql  # 数据库数据存放当前目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    restart: always
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">networks:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  default:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    name: app_network
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span></code></pre></div><h3 id="2-启动服务">2. 启动服务<a hidden class="anchor" aria-hidden="true" href="#2-启动服务">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose up -d
+</span></span></code></pre></div><h3 id="3-停止服务">3. 停止服务<a hidden class="anchor" aria-hidden="true" href="#3-停止服务">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose down
+</span></span></code></pre></div><h3 id="4-设置oplist_data文件夹的权限确保-openlist-容器可以正常读写">4. 设置./oplist_data文件夹的权限，确保 Openlist 容器可以正常读写<a hidden class="anchor" aria-hidden="true" href="#4-设置oplist_data文件夹的权限确保-openlist-容器可以正常读写">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo chown -R 1001:1001 ./oplist_data
+</span></span></code></pre></div><h3 id="5-启动服务">5. 启动服务<a hidden class="anchor" aria-hidden="true" href="#5-启动服务">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose up -d
+</span></span></code></pre></div><h3 id="6-查看服务">6. 查看服务<a hidden class="anchor" aria-hidden="true" href="#6-查看服务">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose ps  
+</span></span></code></pre></div><h2 id="其它操作">其它操作<a hidden class="anchor" aria-hidden="true" href="#其它操作">#</a></h2>
+<h3 id="1-查看日志">1. 查看日志<a hidden class="anchor" aria-hidden="true" href="#1-查看日志">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose logs komari  <span style="color:#75715e"># 查看komari，其它相应的服务名</span>
+</span></span></code></pre></div><h3 id="2-停止服务">2. 停止服务<a hidden class="anchor" aria-hidden="true" href="#2-停止服务">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose stop komari  <span style="color:#75715e"># 停止komari，其它相应的服务名</span>
+</span></span></code></pre></div><h3 id="3-删除数据">3. 删除数据<a hidden class="anchor" aria-hidden="true" href="#3-删除数据">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo rm -rf ./komari_data   <span style="color:#75715e"># 删除komari数据，其它相应的数据名</span>
+</span></span></code></pre></div><h3 id="4-重启服务">4. 重启服务<a hidden class="anchor" aria-hidden="true" href="#4-重启服务">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose up -d komari  <span style="color:#75715e"># 重启komari，其它相应的服务名</span>
+</span></span></code></pre></div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="//localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="//localhost:1313/">我的博客</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

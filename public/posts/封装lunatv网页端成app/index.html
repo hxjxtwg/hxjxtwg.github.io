@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>封装LunaTV网页端成app | 我的博客</title>
+<meta name="keywords" content="技术">
+<meta name="description" content="将 LunaTV（xuhxjx/LunaTV）这个纯网页项目，打包成一个安卓 APP。这个 APP 必须能正确处理全屏播放（自动旋转、隐藏状态栏、适配刘海屏），并且在启动和退出全屏时能正确显示/隐藏状态栏。">
+<meta name="author" content="xxsky">
+<link rel="canonical" href="//localhost:1313/posts/%E5%B0%81%E8%A3%85lunatv%E7%BD%91%E9%A1%B5%E7%AB%AF%E6%88%90app/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.fd5566c526ae48aadabd950798a2dc3568536401560eae5caac3765a42a9e7b5.css" integrity="sha256-/VVmxSauSKravZUHmKLcNWhTZAFWDq5cqsN2WkKp57U=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/%E5%B0%81%E8%A3%85lunatv%E7%BD%91%E9%A1%B5%E7%AB%AF%E6%88%90app/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="//localhost:1313/" accesskey="h" title="我的博客 (Alt + H)">我的博客</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="//localhost:1313/" title="首页">
+                    <span>首页</span>
+                </a>
+            </li>
+            <li>
+                <a href="//localhost:1313/posts/" title="文章">
+                    <span>文章</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      封装LunaTV网页端成app
+    </h1>
+    <div class="post-meta"><span title='2025-12-03 21:13:05 +0800 CST'>December 3, 2025</span>&nbsp;·&nbsp;<span>xxsky</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>将 LunaTV（xuhxjx/LunaTV）这个纯网页项目，打包成一个安卓 APP。这个 APP 必须能正确处理全屏播放（自动旋转、隐藏状态栏、适配刘海屏），并且在启动和退出全屏时能正确显示/隐藏状态栏。</p>
+<h2 id="阶段一准备安装所有必备工具">阶段一：【准备】安装所有必备工具<a hidden class="anchor" aria-hidden="true" href="#阶段一准备安装所有必备工具">#</a></h2>
+<p>这是“搭建工厂”的阶段，在您的 Windows 电脑上准备好所有开发工具。</p>
+<h3 id="1-nodejs-确保已安装您使用的是-v20195">1. Node.js： 确保已安装（您使用的是 v20.19.5）。<a hidden class="anchor" aria-hidden="true" href="#1-nodejs-确保已安装您使用的是-v20195">#</a></h3>
+<h3 id="2-git-确保已安装用于下载项目">2. Git： 确保已安装（用于下载项目）。<a hidden class="anchor" aria-hidden="true" href="#2-git-确保已安装用于下载项目">#</a></h3>
+<h3 id="3-android-studio-确保已安装并已完成所有初始-sdk-组件的下载">3. Android Studio： 确保已安装，并已完成所有初始 SDK 组件的下载。<a hidden class="anchor" aria-hidden="true" href="#3-android-studio-确保已安装并已完成所有初始-sdk-组件的下载">#</a></h3>
+<h3 id="4-pnpm--npm-确保-nodejs-自带的-npm-可用">4. pnpm / npm： 确保 Node.js 自带的 npm 可用。<a hidden class="anchor" aria-hidden="true" href="#4-pnpm--npm-确保-nodejs-自带的-npm-可用">#</a></h3>
+<h2 id="阶段二改造项目配置与依赖命令行">阶段二：【改造】项目配置与依赖（命令行）<a hidden class="anchor" aria-hidden="true" href="#阶段二改造项目配置与依赖命令行">#</a></h2>
+<p>这是最复杂、也是最关键的阶段。我们把“纯网页” (LunaTV) 改造为“可以打包的 APP”。</p>
+<h3 id="1-获取项目代码">1. 获取项目代码：<a hidden class="anchor" aria-hidden="true" href="#1-获取项目代码">#</a></h3>
+<ul>
+<li>
+<p>我们最初尝试 git clone，但遇到了网络问题。</p>
+</li>
+<li>
+<p>最终方案： 直接从 <a href="https://github.com/xuhxjx/LunaTV">https://github.com/xuhxjx/LunaTV</a> 下载 ZIP 压缩包。</p>
+</li>
+<li>
+<p>操作： 解压 LunaTV-main.zip，将其重命名为 LunaTV，并移动到您的工作目录（例如 D:\Tools\LunaTV）。</p>
+</li>
+</ul>
+<h3 id="2-关键修复-1解决依赖冲突">2. 【关键修复-1】解决“依赖冲突”：<a hidden class="anchor" aria-hidden="true" href="#2-关键修复-1解决依赖冲突">#</a></h3>
+<ul>
+<li>
+<p>LunaTV 项目的 package.json 依赖是过时且损坏的。</p>
+</li>
+<li>
+<p>pnpm install 和 npm install 都会失败（ERESOLVE 错误）。</p>
+</li>
+<li>
+<p>最终方案： 我们必须使用 npm 并附带一个“强制”参数来解决。</p>
+</li>
+<li>
+<p>打开cmd命令窗口操作：</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 进入项目目录</span>
+</span></span><span style="display:flex;"><span>D:
+</span></span><span style="display:flex;"><span>cd D:<span style="color:#ae81ff">\T</span>ools<span style="color:#ae81ff">\L</span>unaTV
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 彻底清除旧的/损坏的包（如果存在）</span>
+</span></span><span style="display:flex;"><span>rd /s /q node_modules
+</span></span><span style="display:flex;"><span>del pnpm-lock.yaml
+</span></span><span style="display:flex;"><span>del package-lock.json
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 【关键】使用 --legacy-peer-deps 强制安装</span>
+</span></span><span style="display:flex;"><span>npm install --legacy-peer-deps
+</span></span></code></pre></div><ul>
+<li>(这个过程会很慢（10-20分钟），并且会显示很多 WARN 警告和 vulnerabilities 漏洞，这些都是正常的，可以安全忽略。)</li>
+</ul>
+<h3 id="3-安装-capacitor添加app底盘">3. 安装 Capacitor（添加“APP底盘”）：<a hidden class="anchor" aria-hidden="true" href="#3-安装-capacitor添加app底盘">#</a></h3>
+<ul>
+<li>
+<p>我们同样需要使用 legacy-peer-deps “作弊码”来安装 Capacitor。</p>
+</li>
+<li>
+<p>操作：</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装 Capacitor 核心</span>
+</span></span><span style="display:flex;"><span>npm install @capacitor/core --legacy-peer-deps
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装 Android 平台</span>
+</span></span><span style="display:flex;"><span>npm install @capacitor/android --legacy-peer-deps
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装 Capacitor 命令行工具</span>
+</span></span><span style="display:flex;"><span>npm install -D @capacitor/cli --legacy-peer-deps
+</span></span></code></pre></div><h3 id="4-初始化-capacitor创建配置文件">4. 初始化 Capacitor（创建配置文件）：<a hidden class="anchor" aria-hidden="true" href="#4-初始化-capacitor创建配置文件">#</a></h3>
+<ul>
+<li>操作：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npx cap init
+</span></span></code></pre></div><ul>
+<li>
+<p>它会提问：</p>
+<ul>
+<li>
+<p>App Name? -&gt; XxskyTV (您输入的名字)</p>
+</li>
+<li>
+<p>App ID? -&gt; com.xxsky.lunatv (您输入的ID)</p>
+</li>
+<li>
+<p>web asset directory? -&gt; (我们最初填了 out，这是错误的,应该保持默认public)</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-关键修复-2配置-capacitor-并欺骗它">5. 【关键修复-2】配置 Capacitor 并“欺骗”它：<a hidden class="anchor" aria-hidden="true" href="#5-关键修复-2配置-capacitor-并欺骗它">#</a></h3>
+<ul>
+<li>
+<p>npx cap add 命令需要一个包含 index.html 的 webDir（网页目录）才能运行，但 LunaTV 并没有现成的。</p>
+</li>
+<li>
+<p>最终方案： 我们将 webDir 指向 public 文件夹，并手动在里面创建一个“假”的 index.html。</p>
+</li>
+<li>
+<p>操作：</p>
+</li>
+<li>
+<p>用记事本打开 D:\Tools\LunaTV\capacitor.config.ts 文件。</p>
+</li>
+<li>
+<p>将其内容替换为（确保填入您的 appId, appName 和正确的 url）：</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>import <span style="color:#f92672">{</span> CapacitorConfig <span style="color:#f92672">}</span> from <span style="color:#e6db74">&#39;@capacitor/cli&#39;</span>; // &lt;-- 关键：添加这一行
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>const config: CapacitorConfig <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    appId: <span style="color:#e6db74">&#39;com.xxsky.lunatv&#39;</span>, // 您的 App ID
+</span></span><span style="display:flex;"><span>    appName: <span style="color:#e6db74">&#39;XxskyTV&#39;</span>,        // 您的 App Name
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 【关键】必须指向 <span style="color:#e6db74">&#39;public&#39;</span>
+</span></span><span style="display:flex;"><span>    webDir: <span style="color:#e6db74">&#39;public&#39;</span>,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 【关键】指向您的服务器网址
+</span></span><span style="display:flex;"><span>    server: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      url: <span style="color:#e6db74">&#39;https://mv.hxjx.dpdns.org&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>export default config;
+</span></span></code></pre></div><ul>
+<li>保存并关闭文件。</li>
+<li>回到 cmd 命令行，运行“欺骗”命令：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 在 public 文件夹里创建一个空的 index.html </span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;&lt;html&gt;&lt;/html&gt;&#34;</span> &gt; public/index.html
+</span></span></code></pre></div><h3 id="6-构建与添加平台">6. 构建与添加平台：<a hidden class="anchor" aria-hidden="true" href="#6-构建与添加平台">#</a></h3>
+<ul>
+<li>
+<p>我们需要运行 npm run build 来生成 manifest，并创建 android 文件夹。</p>
+</li>
+<li>
+<p>操作：</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 运行构建（它会失败，但能生成 manifest）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 我们修复了 &#34;Cannot find module &#39;./impl&#39;&#34; 的BUG</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 最终 `npm run build` 成功运行</span>
+</span></span><span style="display:flex;"><span>npm run build 
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 添加 Android 平台</span>
+</span></span><span style="display:flex;"><span>npx cap add android
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 同步所有配置</span>
+</span></span><span style="display:flex;"><span>npx cap sync android
+</span></span></code></pre></div><ul>
+<li>(在这个过程中，我们还安装了 @capacitor/status-bar 和 @capacitor/screen-orientation 插件，但最后发现它们是“敌人”，所以我们最终把它们卸载了。最终的完美方案里不需要它们。)</li>
+</ul>
+<h2 id="阶段三原生修复解决全屏-bugandroid-studio">阶段三：【原生修复】解决全屏 BUG（Android Studio）<a hidden class="anchor" aria-hidden="true" href="#阶段三原生修复解决全屏-bugandroid-studio">#</a></h2>
+<p>这是我们能“完美实现”的最关键一步。我们发现所有问题（状态栏、刘海屏、旋转）都必须通过修改原生 Java 代码来接管，而不是靠插件。</p>
+<h3 id="1-打开项目">1. 打开项目：<a hidden class="anchor" aria-hidden="true" href="#1-打开项目">#</a></h3>
+<ul>
+<li>
+<p>启动 Android Studio。</p>
+</li>
+<li>
+<p>点击 &ldquo;Open&rdquo; (打开)。</p>
+</li>
+<li>
+<p>选择 D:\Tools\LunaTV\android 文件夹。</p>
+</li>
+</ul>
+<h3 id="2-等待-gradle-同步">2. 等待 Gradle 同步：<a hidden class="anchor" aria-hidden="true" href="#2-等待-gradle-同步">#</a></h3>
+<ul>
+<li>第一次打开会很慢，但最终会成功。</li>
+</ul>
+<h3 id="3终极修复替换-mainactivityjava">3.【终极修复】替换 MainActivity.java：<a hidden class="anchor" aria-hidden="true" href="#3终极修复替换-mainactivityjava">#</a></h3>
+<ul>
+<li>
+<p>这是我们所有修复工作的结晶。这段代码教会了 APP 如何像“浏览器”一样处理全屏。</p>
+</li>
+<li>
+<p>操作：</p>
+</li>
+<li>
+<p>在 Android Studio 的左侧文件树中，导航到： app -&gt; java -&gt; com.xxsky.lunatv -&gt; MainActivity.java</p>
+</li>
+<li>
+<p>双击打开它。</p>
+</li>
+<li>
+<p>删除里面的所有内容。</p>
+</li>
+<li>
+<p>粘贴以下**(这个版本 = 刘海修复 + 全屏播放 + 自动旋转 + “智能”隐藏UI + 【新功能】“完整”的“返回键”拦截)**的代码：</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">package</span> com.xxsky.lunatv; <span style="color:#75715e">// 这是您的包名</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.content.pm.ActivityInfo;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.os.Build;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.os.Bundle;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.View;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.ViewGroup;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.Window;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.WindowManager;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.webkit.WebChromeClient;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.webkit.WebView;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.widget.FrameLayout;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.getcapacitor.BridgeActivity;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.WindowInsets;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.WindowInsetsController;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainActivity</span> <span style="color:#66d9ef">extends</span> BridgeActivity {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> View customView;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> WebChromeClient.<span style="color:#a6e22e">CustomViewCallback</span> customViewCallback;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> FrameLayout fullscreenContainer;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> WebView webView; <span style="color:#75715e">// 我们需要这个变量</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span>(Bundle savedInstanceState) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">super</span>.<span style="color:#a6e22e">onCreate</span>(savedInstanceState);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// --- 1. 【修复刘海屏】(不变) ---</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (Build.<span style="color:#a6e22e">VERSION</span>.<span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build.<span style="color:#a6e22e">VERSION_CODES</span>.<span style="color:#a6e22e">P</span>) {
+</span></span><span style="display:flex;"><span>            Window w <span style="color:#f92672">=</span> getWindow();
+</span></span><span style="display:flex;"><span>            WindowManager.<span style="color:#a6e22e">LayoutParams</span> lp <span style="color:#f92672">=</span> w.<span style="color:#a6e22e">getAttributes</span>();
+</span></span><span style="display:flex;"><span>            lp.<span style="color:#a6e22e">layoutInDisplayCutoutMode</span> <span style="color:#f92672">=</span> WindowManager.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES</span>;
+</span></span><span style="display:flex;"><span>            w.<span style="color:#a6e22e">setAttributes</span>(lp);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// --- 2. 【设置全屏播放器】 (不变) ---</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">webView</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">bridge</span>.<span style="color:#a6e22e">getWebView</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">webView</span>.<span style="color:#a6e22e">setWebChromeClient</span>(<span style="color:#66d9ef">new</span> WebChromeClient() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onShowCustomView</span>(View view, CustomViewCallback callback) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (customView <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) { onHideCustomView(); <span style="color:#66d9ef">return</span>; }
+</span></span><span style="display:flex;"><span>                customView <span style="color:#f92672">=</span> view;
+</span></span><span style="display:flex;"><span>                customViewCallback <span style="color:#f92672">=</span> callback;
+</span></span><span style="display:flex;"><span>                fullscreenContainer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> FrameLayout(MainActivity.<span style="color:#a6e22e">this</span>);
+</span></span><span style="display:flex;"><span>                fullscreenContainer.<span style="color:#a6e22e">setLayoutParams</span>(<span style="color:#66d9ef">new</span> FrameLayout.<span style="color:#a6e22e">LayoutParams</span>(ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>, ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>));
+</span></span><span style="display:flex;"><span>                fullscreenContainer.<span style="color:#a6e22e">setBackgroundColor</span>(getResources().<span style="color:#a6e22e">getColor</span>(android.<span style="color:#a6e22e">R</span>.<span style="color:#a6e22e">color</span>.<span style="color:#a6e22e">black</span>));
+</span></span><span style="display:flex;"><span>                fullscreenContainer.<span style="color:#a6e22e">addView</span>(customView, <span style="color:#66d9ef">new</span> FrameLayout.<span style="color:#a6e22e">LayoutParams</span>(ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>, ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>));
+</span></span><span style="display:flex;"><span>                ViewGroup decorView <span style="color:#f92672">=</span> (ViewGroup) getWindow().<span style="color:#a6e22e">getDecorView</span>();
+</span></span><span style="display:flex;"><span>                decorView.<span style="color:#a6e22e">addView</span>(fullscreenContainer, <span style="color:#66d9ef">new</span> FrameLayout.<span style="color:#a6e22e">LayoutParams</span>(ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>, ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                hideSystemUI(); 
+</span></span><span style="display:flex;"><span>                setRequestedOrientation(ActivityInfo.<span style="color:#a6e22e">SCREEN_ORIENTATION_LANDSCAPE</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onHideCustomView</span>() {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (customView <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) { <span style="color:#66d9ef">return</span>; }
+</span></span><span style="display:flex;"><span>                ViewGroup decorView <span style="color:#f92672">=</span> (ViewGroup) getWindow().<span style="color:#a6e22e">getDecorView</span>();
+</span></span><span style="display:flex;"><span>                decorView.<span style="color:#a6e22e">removeView</span>(fullscreenContainer);
+</span></span><span style="display:flex;"><span>                fullscreenContainer <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>                customView <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (customViewCallback <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                    customViewCallback.<span style="color:#a6e22e">onCustomViewHidden</span>();
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                showSystemUI(); 
+</span></span><span style="display:flex;"><span>                setRequestedOrientation(ActivityInfo.<span style="color:#a6e22e">SCREEN_ORIENTATION_PORTRAIT</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        });
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// --- 3. 【【【“返回键”的“终极修复”（“复制”版）】】】 ---</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onBackPressed</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// a. 当用户按下“返回”...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// b. ...【优先】检查“全屏播放器”(`customView`) 是不是“正在显示”</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">customView</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// c. ...如果是，我们就“退出全屏”</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// ↓↓↓ 我们“复制” onHideCustomView() 里的代码 ↓↓↓</span>
+</span></span><span style="display:flex;"><span>            ViewGroup decorView <span style="color:#f92672">=</span> (ViewGroup) getWindow().<span style="color:#a6e22e">getDecorView</span>();
+</span></span><span style="display:flex;"><span>            decorView.<span style="color:#a6e22e">removeView</span>(fullscreenContainer);
+</span></span><span style="display:flex;"><span>            fullscreenContainer <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>            customView <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (customViewCallback <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                customViewCallback.<span style="color:#a6e22e">onCustomViewHidden</span>();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            showSystemUI(); 
+</span></span><span style="display:flex;"><span>            setRequestedOrientation(ActivityInfo.<span style="color:#a6e22e">SCREEN_ORIENTATION_PORTRAIT</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// ↑↑↑ “复制”结束 ↑↑↑</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        } 
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// d. ...【其次】检查“网页”(`webView`) 是不是“可以后退”</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">webView</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">webView</span>.<span style="color:#a6e22e">canGoBack</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// e. ...如果是，我们就在“网页”里后退</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">webView</span>.<span style="color:#a6e22e">goBack</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// f. ...【最后】如果“既没有全屏”也“不能后退” (在主页)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// g. ...我们就“退出APP”</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">super</span>.<span style="color:#a6e22e">onBackPressed</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// --- 4. 【“智能”隐藏UI函数”（不变）】 ---</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">hideSystemUI</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (Build.<span style="color:#a6e22e">VERSION</span>.<span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build.<span style="color:#a6e22e">VERSION_CODES</span>.<span style="color:#a6e22e">R</span>) {
+</span></span><span style="display:flex;"><span>            WindowInsetsController controller <span style="color:#f92672">=</span> getWindow().<span style="color:#a6e22e">getInsetsController</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (controller <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                controller.<span style="color:#a6e22e">hide</span>(WindowInsets.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">statusBars</span>() <span style="color:#f92672">|</span> WindowInsets.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">navigationBars</span>());
+</span></span><span style="display:flex;"><span>                controller.<span style="color:#a6e22e">setSystemBarsBehavior</span>(WindowInsetsController.<span style="color:#a6e22e">BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            View decorView <span style="color:#f92672">=</span> getWindow().<span style="color:#a6e22e">getDecorView</span>();
+</span></span><span style="display:flex;"><span>            decorView.<span style="color:#a6e22e">setSystemUiVisibility</span>(
+</span></span><span style="display:flex;"><span>                    View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_IMMERSIVE_STICKY</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">|</span> View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_LAYOUT_STABLE</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">|</span> View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">|</span> View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">|</span> View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_HIDE_NAVIGATION</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">|</span> View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_FULLSCREEN</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// --- 5. 【“智能”显示UI函数”（不变）】 ---</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">showSystemUI</span>() {
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">if</span> (Build.<span style="color:#a6e22e">VERSION</span>.<span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build.<span style="color:#a6e22e">VERSION_CODES</span>.<span style="color:#a6e22e">R</span>) {
+</span></span><span style="display:flex;"><span>            WindowInsetsController controller <span style="color:#f92672">=</span> getWindow().<span style="color:#a6e22e">getInsetsController</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (controller <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                controller.<span style="color:#a6e22e">show</span>(WindowInsets.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">statusBars</span>() <span style="color:#f92672">|</span> WindowInsets.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">navigationBars</span>());
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            View decorView <span style="color:#f92672">=</span> getWindow().<span style="color:#a6e22e">getDecorView</span>();
+</span></span><span style="display:flex;"><span>            decorView.<span style="color:#a6e22e">setSystemUiVisibility</span>(View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_LAYOUT_STABLE</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>保存这个文件 (Ctrl + S)。</li>
+</ul>
+<p>另一个不完美方案(这个版本 = 刘海修复 + 全屏播放 + 自动旋转 + “智能”隐藏UI + “完整”的“返回键”拦截+沉浸式‘网页标题栏与手机状态栏重叠’)的代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">package</span> com.xxsky.lunatv; <span style="color:#75715e">// 这是您的包名</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.content.pm.ActivityInfo;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.os.Build;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.os.Bundle;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.View;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.ViewGroup;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.Window;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.WindowManager;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.webkit.WebChromeClient;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.webkit.WebView;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.widget.FrameLayout;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.getcapacitor.BridgeActivity;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.Window;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.WindowManager;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.os.Build;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.WindowInsets;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.view.WindowInsetsController;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainActivity</span> <span style="color:#66d9ef">extends</span> BridgeActivity {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> View customView;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> WebChromeClient.<span style="color:#a6e22e">CustomViewCallback</span> customViewCallback;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> FrameLayout fullscreenContainer;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> WebView webView; <span style="color:#75715e">// 我们需要这个变量</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span>(Bundle savedInstanceState) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">super</span>.<span style="color:#a6e22e">onCreate</span>(savedInstanceState);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (Build.<span style="color:#a6e22e">VERSION</span>.<span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build.<span style="color:#a6e22e">VERSION_CODES</span>.<span style="color:#a6e22e">R</span>) {
+</span></span><span style="display:flex;"><span>            Window w <span style="color:#f92672">=</span> getWindow();
+</span></span><span style="display:flex;"><span>            w.<span style="color:#a6e22e">setDecorFitsSystemWindows</span>(<span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>            w.<span style="color:#a6e22e">setFlags</span>(WindowManager.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">FLAG_LAYOUT_NO_LIMITS</span>, WindowManager.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">FLAG_LAYOUT_NO_LIMITS</span>);
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            Window w <span style="color:#f92672">=</span> getWindow();
+</span></span><span style="display:flex;"><span>            w.<span style="color:#a6e22e">setFlags</span>(WindowManager.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">FLAG_LAYOUT_NO_LIMITS</span>, WindowManager.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">FLAG_LAYOUT_NO_LIMITS</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// --- 1. 【修复刘海屏】(不变) ---</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (Build.<span style="color:#a6e22e">VERSION</span>.<span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build.<span style="color:#a6e22e">VERSION_CODES</span>.<span style="color:#a6e22e">P</span>) {
+</span></span><span style="display:flex;"><span>            Window w <span style="color:#f92672">=</span> getWindow();
+</span></span><span style="display:flex;"><span>            WindowManager.<span style="color:#a6e22e">LayoutParams</span> lp <span style="color:#f92672">=</span> w.<span style="color:#a6e22e">getAttributes</span>();
+</span></span><span style="display:flex;"><span>            lp.<span style="color:#a6e22e">layoutInDisplayCutoutMode</span> <span style="color:#f92672">=</span> WindowManager.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES</span>;
+</span></span><span style="display:flex;"><span>            w.<span style="color:#a6e22e">setAttributes</span>(lp);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// --- 2. 【设置全屏播放器】 (不变) ---</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">webView</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">bridge</span>.<span style="color:#a6e22e">getWebView</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">webView</span>.<span style="color:#a6e22e">setWebChromeClient</span>(<span style="color:#66d9ef">new</span> WebChromeClient() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onShowCustomView</span>(View view, CustomViewCallback callback) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (customView <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) { onHideCustomView(); <span style="color:#66d9ef">return</span>; }
+</span></span><span style="display:flex;"><span>                customView <span style="color:#f92672">=</span> view;
+</span></span><span style="display:flex;"><span>                customViewCallback <span style="color:#f92672">=</span> callback;
+</span></span><span style="display:flex;"><span>                fullscreenContainer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> FrameLayout(MainActivity.<span style="color:#a6e22e">this</span>);
+</span></span><span style="display:flex;"><span>                fullscreenContainer.<span style="color:#a6e22e">setLayoutParams</span>(<span style="color:#66d9ef">new</span> FrameLayout.<span style="color:#a6e22e">LayoutParams</span>(ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>, ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>));
+</span></span><span style="display:flex;"><span>                fullscreenContainer.<span style="color:#a6e22e">setBackgroundColor</span>(getResources().<span style="color:#a6e22e">getColor</span>(android.<span style="color:#a6e22e">R</span>.<span style="color:#a6e22e">color</span>.<span style="color:#a6e22e">black</span>));
+</span></span><span style="display:flex;"><span>                fullscreenContainer.<span style="color:#a6e22e">addView</span>(customView, <span style="color:#66d9ef">new</span> FrameLayout.<span style="color:#a6e22e">LayoutParams</span>(ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>, ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>));
+</span></span><span style="display:flex;"><span>                ViewGroup decorView <span style="color:#f92672">=</span> (ViewGroup) getWindow().<span style="color:#a6e22e">getDecorView</span>();
+</span></span><span style="display:flex;"><span>                decorView.<span style="color:#a6e22e">addView</span>(fullscreenContainer, <span style="color:#66d9ef">new</span> FrameLayout.<span style="color:#a6e22e">LayoutParams</span>(ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>, ViewGroup.<span style="color:#a6e22e">LayoutParams</span>.<span style="color:#a6e22e">MATCH_PARENT</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                hideSystemUI();
+</span></span><span style="display:flex;"><span>                setRequestedOrientation(ActivityInfo.<span style="color:#a6e22e">SCREEN_ORIENTATION_LANDSCAPE</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onHideCustomView</span>() {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (customView <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) { <span style="color:#66d9ef">return</span>; }
+</span></span><span style="display:flex;"><span>                ViewGroup decorView <span style="color:#f92672">=</span> (ViewGroup) getWindow().<span style="color:#a6e22e">getDecorView</span>();
+</span></span><span style="display:flex;"><span>                decorView.<span style="color:#a6e22e">removeView</span>(fullscreenContainer);
+</span></span><span style="display:flex;"><span>                fullscreenContainer <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>                customView <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (customViewCallback <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                    customViewCallback.<span style="color:#a6e22e">onCustomViewHidden</span>();
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                showSystemUI();
+</span></span><span style="display:flex;"><span>                setRequestedOrientation(ActivityInfo.<span style="color:#a6e22e">SCREEN_ORIENTATION_PORTRAIT</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        });
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// --- 3. 【【【“返回键”的“终极修复”（“复制”版）】】】 ---</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onBackPressed</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// a. 当用户按下“返回”...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// b. ...【优先】检查“全屏播放器”(`customView`) 是不是“正在显示”</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">customView</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// c. ...如果是，我们就“退出全屏”</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// ↓↓↓ 我们“复制” onHideCustomView() 里的代码 ↓↓↓</span>
+</span></span><span style="display:flex;"><span>            ViewGroup decorView <span style="color:#f92672">=</span> (ViewGroup) getWindow().<span style="color:#a6e22e">getDecorView</span>();
+</span></span><span style="display:flex;"><span>            decorView.<span style="color:#a6e22e">removeView</span>(fullscreenContainer);
+</span></span><span style="display:flex;"><span>            fullscreenContainer <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>            customView <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (customViewCallback <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                customViewCallback.<span style="color:#a6e22e">onCustomViewHidden</span>();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            showSystemUI();
+</span></span><span style="display:flex;"><span>            setRequestedOrientation(ActivityInfo.<span style="color:#a6e22e">SCREEN_ORIENTATION_PORTRAIT</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// ↑↑↑ “复制”结束 ↑↑↑</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// d. ...【其次】检查“网页”(`webView`) 是不是“可以后退”</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">webView</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">webView</span>.<span style="color:#a6e22e">canGoBack</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// e. ...如果是，我们就在“网页”里后退</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">webView</span>.<span style="color:#a6e22e">goBack</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// f. ...【最后】如果“既没有全屏”也“不能后退” (在主页)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// g. ...我们就“退出APP”</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">super</span>.<span style="color:#a6e22e">onBackPressed</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// --- 4. 【“智能”隐藏UI函数”（不变）】 ---</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">hideSystemUI</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (Build.<span style="color:#a6e22e">VERSION</span>.<span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build.<span style="color:#a6e22e">VERSION_CODES</span>.<span style="color:#a6e22e">R</span>) {
+</span></span><span style="display:flex;"><span>            WindowInsetsController controller <span style="color:#f92672">=</span> getWindow().<span style="color:#a6e22e">getInsetsController</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (controller <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                controller.<span style="color:#a6e22e">hide</span>(WindowInsets.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">statusBars</span>() <span style="color:#f92672">|</span> WindowInsets.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">navigationBars</span>());
+</span></span><span style="display:flex;"><span>                controller.<span style="color:#a6e22e">setSystemBarsBehavior</span>(WindowInsetsController.<span style="color:#a6e22e">BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            View decorView <span style="color:#f92672">=</span> getWindow().<span style="color:#a6e22e">getDecorView</span>();
+</span></span><span style="display:flex;"><span>            decorView.<span style="color:#a6e22e">setSystemUiVisibility</span>(
+</span></span><span style="display:flex;"><span>                    View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_IMMERSIVE_STICKY</span>
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">|</span> View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_LAYOUT_STABLE</span>
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">|</span> View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION</span>
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">|</span> View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN</span>
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">|</span> View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_HIDE_NAVIGATION</span>
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">|</span> View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_FULLSCREEN</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// --- 5. 【“智能”显示UI函数”（不变）】 ---</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">showSystemUI</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (Build.<span style="color:#a6e22e">VERSION</span>.<span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build.<span style="color:#a6e22e">VERSION_CODES</span>.<span style="color:#a6e22e">R</span>) {
+</span></span><span style="display:flex;"><span>            WindowInsetsController controller <span style="color:#f92672">=</span> getWindow().<span style="color:#a6e22e">getInsetsController</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (controller <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                controller.<span style="color:#a6e22e">show</span>(WindowInsets.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">statusBars</span>() <span style="color:#f92672">|</span> WindowInsets.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">navigationBars</span>());
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            View decorView <span style="color:#f92672">=</span> getWindow().<span style="color:#a6e22e">getDecorView</span>();
+</span></span><span style="display:flex;"><span>            decorView.<span style="color:#a6e22e">setSystemUiVisibility</span>(View.<span style="color:#a6e22e">SYSTEM_UI_FLAG_LAYOUT_STABLE</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="阶段四更改-app-图标">阶段四：更改 APP 图标<a hidden class="anchor" aria-hidden="true" href="#阶段四更改-app-图标">#</a></h2>
+<h3 id="1准备您的图标文件">1：准备您的图标文件<a hidden class="anchor" aria-hidden="true" href="#1准备您的图标文件">#</a></h3>
+<p>您需要一张正方形的图片。</p>
+<ul>
+<li>
+<p>格式： 最好是 .png 格式（支持透明背景）。</p>
+</li>
+<li>
+<p>尺寸： 尺寸越大越好，Android Studio 会自动帮您缩放。理想尺寸是 1024x1024 像素（512x512 也可以）。</p>
+</li>
+<li>
+<p>注意： 现代安卓图标有“安全区域”（通常是中间 66% 的圆形或圆角矩形）。请确保您的“核心”Logo 在这个安全区域内，否则它可能会被裁切。</p>
+</li>
+<li>
+<p>准备好这张 .png 文件，并把它放在您电脑上一个容易找到的位置（比如“桌面”）。</p>
+</li>
+</ul>
+<h3 id="2使用-android-studio-的asset-studio工具">2：使用 Android Studio 的“Asset Studio”工具<a hidden class="anchor" aria-hidden="true" href="#2使用-android-studio-的asset-studio工具">#</a></h3>
+<ul>
+<li>
+<p>请回到您的 Android Studio（确保 D:\Tools\LunaTV\android 项目是打开的）。</p>
+</li>
+<li>
+<p>在左上角的**“项目”文件浏览器**中（您之前找 MainActivity.java 的地方）。</p>
+</li>
+<li>
+<p>右键点击最顶层的那个 app 文件夹（它有一个蓝色的“a”图标）。</p>
+</li>
+<li>
+<p>在弹出的菜单中，移动到 &ldquo;New&rdquo; (新建) -&gt; &ldquo;Image Asset&rdquo; (图像资产)。</p>
+</li>
+</ul>
+<h3 id="3-配置您的新图标">3. 配置您的新图标<a hidden class="anchor" aria-hidden="true" href="#3-配置您的新图标">#</a></h3>
+<ul>
+<li>
+<p>点击后，会弹出一个叫 &ldquo;Asset Studio&rdquo; 的新窗口。</p>
+</li>
+<li>
+<p>Icon Type (图标类型)： 保持默认的 Launcher Icons (Adaptive &amp; Legacy)。</p>
+</li>
+<li>
+<p>Name (名称)： 保持默认的 ic_launcher。</p>
+</li>
+<li>
+<p>Source Asset (源资产)：</p>
+</li>
+<li>
+<p>在 Path (路径) 这一行，点击它最右边的**“文件夹”图标**。</p>
+</li>
+<li>
+<p>在弹出的文件选择器中，找到并选择您在步骤 1 中准备好的那张 .png 图标文件。</p>
+</li>
+<li>
+<p>点击 OK。</p>
+</li>
+<li>
+<p>调整 (Scaling)：</p>
+</li>
+<li>
+<p>您会立刻在右侧的“预览”窗口看到您的图标。</p>
+</li>
+<li>
+<p>您可能会看到一个“安全区”的圆圈。</p>
+</li>
+<li>
+<p>在中间的 Resize (调整大小) 滑块上，您可以左右拖动，把您的图标缩放到您觉得合适的大小（通常是让它刚好填满那个“安全区”）。</p>
+</li>
+<li>
+<p>（可选）Background Layer (背景层)：</p>
+</li>
+<li>
+<p>如果您的 .png 是透明的，您可以在这里给它加一个纯色背景。</p>
+</li>
+<li>
+<p>在 Name: ic_launcher 的下方，您会看到三个标签页 (Tab)：</p>
+<ul>
+<li>
+<p>Foreground Layer (前景层) &lt;&ndash; 您现在在这里！（它是蓝色的）</p>
+</li>
+<li>
+<p>Background Layer (背景层) &lt;&ndash; 您要点击这里！</p>
+</li>
+<li>
+<p>Options (选项)</p>
+</li>
+</ul>
+</li>
+<li>
+<p>点击一下第二个标签页，也就是 Background Layer (背景层)</p>
+<ul>
+<li>Source Asset -&gt; Asset Type -&gt; Color (颜色)，</li>
+<li>然后选择您想要的背景色。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-生成图标">4. 生成图标<a hidden class="anchor" aria-hidden="true" href="#4-生成图标">#</a></h3>
+<ul>
+<li>
+<p>当您对预览满意后，点击右下角的 &ldquo;Next&rdquo; (下一步) 按钮。</p>
+</li>
+<li>
+<p>它会弹出一个新窗口，显示它将要**“覆盖”**（Overwrite）一大堆旧的 ic_launcher.png 文件。</p>
+</li>
+<li>
+<p>这是正常的，这正是我们想要的。</p>
+</li>
+<li>
+<p>点击右下角的 &ldquo;Finish&rdquo; (完成) 按钮。</p>
+</li>
+</ul>
+<p>Android Studio 现在会自动生成所有不同尺寸（mdpi, hdpi, xhdpi 等）的图标，并替换掉项目里默认的那个 Capacitor 图标。</p>
+<h2 id="阶段五启动logo图标">阶段五：启动logo图标<a hidden class="anchor" aria-hidden="true" href="#阶段五启动logo图标">#</a></h2>
+<h3 id="1-准备您的新图片">1. 准备您的新图片<a hidden class="anchor" aria-hidden="true" href="#1-准备您的新图片">#</a></h3>
+<ul>
+<li>
+<p>请您准备好您自己的“启动页面”图片（例如，您桌面上有一个 logo.png）。</p>
+</li>
+<li>
+<p>重要：您不需要准备11个版本。您只需要一张高分辨率的 .png 文件。</p>
+</li>
+<li>
+<p>尺寸如：215*215，底色透明。</p>
+</li>
+</ul>
+<h3 id="2-添加logopng">2. 添加logo.png<a hidden class="anchor" aria-hidden="true" href="#2-添加logopng">#</a></h3>
+<ul>
+<li>
+<p>请您再次找到并打开那个文件： app -&gt; res -&gt; drawable -&gt; splash_layout.xml</p>
+</li>
+<li>
+<p>回到 Android Studio。</p>
+</li>
+<li>
+<p>在左侧文件树中，找到 res/drawable 文件夹。</p>
+</li>
+<li>
+<p>右键点击 drawable 文件夹-&gt;open in-&gt;Explorer&quot; (在资源管理器中显示)。</p>
+</li>
+<li>
+<p>Windows 文件夹会打开 drawable 文件夹。</p>
+</li>
+<li>
+<p>把logo.png 复制到这个文件夹里。 (我们不再需要 drawable-hdpi那些文件夹了)</p>
+</li>
+</ul>
+<p>###3. 创建“智能”布局文件 (splash_layout.xml)</p>
+<ul>
+<li>
+<p>回到 Android Studio。</p>
+</li>
+<li>
+<p>右键点击 res/drawable 文件夹。</p>
+</li>
+<li>
+<p>选择 &ldquo;New&rdquo; (新建) -&gt; &ldquo;Drawable Resource File&rdquo; (Drawable 资源文件)。</p>
+</li>
+<li>
+<p>File name (文件名): 请输入 splash_layout</p>
+</li>
+<li>
+<p>Root element (根元素): 请输入 layer-list</p>
+</li>
+<li>
+<p>点击 OK。</p>
+</li>
+<li>
+<p>一个新的 splash_layout.xml 文件会生成。</p>
+</li>
+<li>
+<p>在资源管理器中记事本打开，然后替换粘贴以下全部代码：</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;layer-list</span> <span style="color:#a6e22e">xmlns:android=</span><span style="color:#e6db74">&#34;http://schemas.android.com/apk/res/android&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;item&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;color</span> <span style="color:#a6e22e">android:color=</span><span style="color:#e6db74">&#34;?android:attr/colorBackground&#34;</span> <span style="color:#f92672">/&gt;</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/item&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;item</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">android:width=</span><span style="color:#e6db74">&#34;200dp&#34;</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">android:height=</span><span style="color:#e6db74">&#34;200dp&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">android:drawable=</span><span style="color:#e6db74">&#34;@drawable/logo&#34;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">android:gravity=</span><span style="color:#e6db74">&#34;center&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/layer-list&gt;</span>
+</span></span></code></pre></div><p>*（重要！） 在粘贴后，请务必修改 android:drawable=&quot;@drawable/logo&quot; 这一行，把 logo 改成您自己的文件名（不带 .png）。</p>
+<ul>
+<li>保存并关闭 splash_layout.xml。</li>
+</ul>
+<h3 id="4-告诉-app-使用新的启动页">4. 告诉 APP 使用“新”的启动页<a hidden class="anchor" aria-hidden="true" href="#4-告诉-app-使用新的启动页">#</a></h3>
+<ul>
+<li>
+<p>打开 res/values/styles.xml 文件。</p>
+</li>
+<li>
+<p>找到 AppTheme.NoActionBarLaunch 这一段，整个<code>&lt;style&gt;</code>替换修改成</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>    <span style="color:#f92672">&lt;style</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;AppTheme.NoActionBarLaunch&#34;</span> <span style="color:#a6e22e">parent=</span><span style="color:#e6db74">&#34;AppTheme.NoActionBar&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;item</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;android:windowBackground&#34;</span><span style="color:#f92672">&gt;</span>@drawable/splash_layout<span style="color:#f92672">&lt;/item&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;item</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;windowActionBar&#34;</span><span style="color:#f92672">&gt;</span>false<span style="color:#f92672">&lt;/item&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;item</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;windowNoTitle&#34;</span><span style="color:#f92672">&gt;</span>true<span style="color:#f92672">&lt;/item&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/style&gt;</span>
+</span></span></code></pre></div><p>或者</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>   <span style="color:#f92672">&lt;style</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;AppTheme.NoActionBarLaunch&#34;</span> <span style="color:#a6e22e">parent=</span><span style="color:#e6db74">&#34;Theme.AppCompat.Light.NoActionBar&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#f92672">&lt;item</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;android:windowBackground&#34;</span><span style="color:#f92672">&gt;</span>@drawable/splash_layout<span style="color:#f92672">&lt;/item&gt;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#f92672">&lt;item</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;windowActionBar&#34;</span><span style="color:#f92672">&gt;</span>false<span style="color:#f92672">&lt;/item&gt;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#f92672">&lt;item</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;windowNoTitle&#34;</span><span style="color:#f92672">&gt;</span>true<span style="color:#f92672">&lt;/item&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&lt;/style&gt;</span>
+</span></span></code></pre></div><ul>
+<li>
+<p>保存并关闭 styles.xml。</p>
+</li>
+<li>
+<p>（可选，但推荐） 为了省空间，您可以删除掉那 11 张旧的 splash.png 文件了（在 drawable 文件夹下的 splash (11) 组上点右键 -&gt; &ldquo;Delete&rdquo;）。</p>
+</li>
+</ul>
+<h2 id="阶段六打包生成最终的-apk">阶段六：【打包】生成最终的 APK<a hidden class="anchor" aria-hidden="true" href="#阶段六打包生成最终的-apk">#</a></h2>
+<ol>
+<li>
+<p>在 Android Studio 中，点击顶部菜单栏的 &ldquo;Build&rdquo; (构建)。</p>
+</li>
+<li>
+<p>选择 &ldquo;Generate App Bundles or APKs&rdquo; (生成&hellip;)。</p>
+</li>
+<li>
+<p>在子菜单中，选择 &ldquo;Generate APKs&rdquo; (生成 APKs)。</p>
+</li>
+<li>
+<p>等待构建完成（BUILD SUCCESSFUL）。</p>
+</li>
+<li>
+<p>在右下角弹出的通知中，点击 &ldquo;Locate&rdquo; (定位)。</p>
+</li>
+<li>
+<p>最终成品： 您会得到 app-debug.apk 文件，它现在是“布局完美”且“功能完美”的。</p>
+</li>
+</ol>
+<h2 id="附加七更新操作">附加七：更新操作<a hidden class="anchor" aria-hidden="true" href="#附加七更新操作">#</a></h2>
+<h3 id="1-如修改app名app-idserverurl">1. 如修改app名、App ID、server.url<a hidden class="anchor" aria-hidden="true" href="#1-如修改app名app-idserverurl">#</a></h3>
+<ul>
+<li>路径：D:\Tools\MyNavApp\capacitor.config.ts</li>
+<li>用记事本打开您项目根目录的capacitor.config.ts文件</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;appId&#34;</span>: <span style="color:#e6db74">&#34;com.myname.nav&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;appName&#34;</span>: <span style="color:#e6db74">&#34;我的新导航名字&#34;</span>,  &lt;-- 修改这里
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;webDir&#34;</span>: <span style="color:#e6db74">&#34;public&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;server&#34;</span>: <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;url&#34;</span>: <span style="color:#e6db74">&#34;https://...&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ul>
+<li>保存文件</li>
+</ul>
+<h3 id="2-同步到安卓">2. 同步”到安卓<a hidden class="anchor" aria-hidden="true" href="#2-同步到安卓">#</a></h3>
+<ul>
+<li>打开 cmd 命令行，进入您的项目目录：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd D:<span style="color:#ae81ff">\T</span>ools<span style="color:#ae81ff">\M</span>yNavApp
+</span></span></code></pre></div><ul>
+<li>运行同步命令：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>npx cap sync android
+</span></span></code></pre></div><h3 id="3-重新打包">3. 重新打包：<a hidden class="anchor" aria-hidden="true" href="#3-重新打包">#</a></h3>
+<ul>
+<li>
+<p>打开 Android Studio（D:\Tools\MyNavApp\android）。</p>
+</li>
+<li>
+<p>Android Studio -&gt; file -&gt; Sync project&hellip; -&gt; 请点击它。</p>
+</li>
+<li>
+<p>&ldquo;Build&rdquo; -&gt; &ldquo;Generate &hellip; APKs&rdquo; -&gt; &ldquo;Generate APKs&rdquo;。</p>
+</li>
+</ul>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="//localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="//localhost:1313/">我的博客</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

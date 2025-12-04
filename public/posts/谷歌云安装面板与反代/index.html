@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>谷歌云安装面板与反代 | 我的博客</title>
+<meta name="keywords" content="技术">
+<meta name="description" content="谷歌云安装面板与反代 - 我的博客">
+<meta name="author" content="xxsky">
+<link rel="canonical" href="//localhost:1313/posts/%E8%B0%B7%E6%AD%8C%E4%BA%91%E5%AE%89%E8%A3%85%E9%9D%A2%E6%9D%BF%E4%B8%8E%E5%8F%8D%E4%BB%A3/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.fd5566c526ae48aadabd950798a2dc3568536401560eae5caac3765a42a9e7b5.css" integrity="sha256-/VVmxSauSKravZUHmKLcNWhTZAFWDq5cqsN2WkKp57U=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/%E8%B0%B7%E6%AD%8C%E4%BA%91%E5%AE%89%E8%A3%85%E9%9D%A2%E6%9D%BF%E4%B8%8E%E5%8F%8D%E4%BB%A3/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="//localhost:1313/" accesskey="h" title="我的博客 (Alt + H)">我的博客</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="//localhost:1313/" title="首页">
+                    <span>首页</span>
+                </a>
+            </li>
+            <li>
+                <a href="//localhost:1313/posts/" title="文章">
+                    <span>文章</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      谷歌云安装面板与反代
+    </h1>
+    <div class="post-meta"><span title='2025-12-04 00:48:14 +0800 CST'>December 4, 2025</span>&nbsp;·&nbsp;<span>xxsky</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="1docker环境安装">1.docker环境安装<a hidden class="anchor" aria-hidden="true" href="#1docker环境安装">#</a></h2>
+<p>1.1 Docker 官方一键安装脚本:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -fsSL https://get.docker.com -o get-docker.sh
+</span></span><span style="display:flex;"><span>sudo sh get-docker.sh
+</span></span></code></pre></div><p>1.2 验证安装：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker version
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose version
+</span></span></code></pre></div><h2 id="2安装并配置nezha面板与openlist">2.安装并配置nezha面板与openlist<a hidden class="anchor" aria-hidden="true" href="#2安装并配置nezha面板与openlist">#</a></h2>
+<p>2.1 一键生成docker-compose.yml</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; docker-compose.yml <span style="color:#e6db74">&lt;&lt;EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">services:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  # 哪吒面板服务
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  nezha:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    container_name: nezha
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    image: ghcr.io/nezhahq/nezha:latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    network_mode: &#34;host&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    volumes:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ./nezha_data:/dashboard/data
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    restart: unless-stopped
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  # openlist服务
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  openlist:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    container_name: openlist
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    image: openlistteam/openlist:latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    network_mode: &#34;host&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    environment:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - TZ=Asia/Shanghai
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - OPENLIST_ADMIN_PASSWORD=用户密码 # 修改登陆密码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    volumes:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ./oplist_data:/opt/openlist/data
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    restart: unless-stopped
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span></code></pre></div><p>2.2 设置./oplist_data文件夹的权限，确保 Openlist 容器可以正常读写</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo chown -R 1001:1001 ./oplist_data
+</span></span></code></pre></div><p>2.3 启动服务</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose up -d
+</span></span></code></pre></div><h2 id="3-caddy2反向代理安装">3. Caddy2反向代理安装<a hidden class="anchor" aria-hidden="true" href="#3-caddy2反向代理安装">#</a></h2>
+<p>在 Debian/Ubuntu 系统上安装 Caddy2，可以按照以下步骤操作：</p>
+<p>3.1 安装必要的软件包</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
+</span></span></code></pre></div><p>3.2 添加 Caddy 的 GPG 密钥</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -1sLf <span style="color:#e6db74">&#39;https://dl.cloudsmith.io/public/caddy/stable/gpg.key&#39;</span> | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+</span></span></code></pre></div><p>3.3 添加 Caddy 的软件源</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -1sLf <span style="color:#e6db74">&#39;https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt&#39;</span> | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+</span></span></code></pre></div><p>3.4 更新软件包列表</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt update
+</span></span></code></pre></div><p>3.5 安装 Caddy</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install caddy
+</span></span></code></pre></div><p>3.6 检查Caddy版本，确认安装成功</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>caddy version
+</span></span></code></pre></div><h2 id="4-caddy2配置反向代理">4. Caddy2配置反向代理<a hidden class="anchor" aria-hidden="true" href="#4-caddy2配置反向代理">#</a></h2>
+<p>4.1 编辑 Caddyfile</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nano /etc/caddy/Caddyfile
+</span></span></code></pre></div><p>4.2 粘贴配置如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 哪吒面板的反向代理配置</span>
+</span></span><span style="display:flex;"><span>mb.hxjx.hidns.co <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    reverse_proxy localhost:8008
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Openlist 的反向代理配置</span>
+</span></span><span style="display:flex;"><span>oplist.hxjx.hidns.co <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    reverse_proxy localhost:5244
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>保存并退出 (Ctrl + X -&gt; Y -&gt; Enter)。mb.hxjx.hidns.co、oplist.hxjx.hidns.co为域名并添加了A记录或AAA记录</p>
+<p>4.3 重载 Caddy 配置使其生效：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl reload caddy
+</span></span></code></pre></div><p>4.4 其它相关命令：
+启动 Caddy 服务</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl start caddy
+</span></span></code></pre></div><p>设置 Caddy 开机自启</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl enable caddy
+</span></span></code></pre></div><p>重启 Caddy 服务</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl restart caddy
+</span></span></code></pre></div><p>停止 Caddy 服务</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl stop caddy
+</span></span></code></pre></div><p>修改配置文件后重载配置（不中断服务）</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl reload caddy
+</span></span></code></pre></div><p>查看 Caddy 运行状态</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl status caddy
+</span></span></code></pre></div><h2 id="5-补充配置">5. 补充配置<a hidden class="anchor" aria-hidden="true" href="#5-补充配置">#</a></h2>
+<p>由于谷歌云关闭了CDN网络，需要配置新的证书发放机构。使用Google自家证书</p>
+<h3 id="51-获取谷歌证书的key">5.1 获取谷歌证书的Key<a hidden class="anchor" aria-hidden="true" href="#51-获取谷歌证书的key">#</a></h3>
+<p>VPS 终端里运行这条命令（这是 GCP 自带的工具）：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gcloud beta publicca external-account-keys create
+</span></span></code></pre></div><p>可能出现的情况：</p>
+<ul>
+<li>
+<p>如果直接成功：它会显示 keyId 和 b64MacKey。请立刻把这两个字符串发给我。</p>
+</li>
+<li>
+<p>如果提示 API 未启用：它会问 API [publicca.googleapis.com] not enabled. Enable it? (y/N)。请输入 y 并回车。</p>
+</li>
+<li>
+<p>如果提示未登录：它会报错让登录。如果遇到这个，请告诉我，我教你另一种简单的方法。</p>
+</li>
+</ul>
+<h3 id="52-写入新的-caddyfile包含你的谷歌密钥">5.2 写入新的 Caddyfile（包含你的谷歌密钥）<a hidden class="anchor" aria-hidden="true" href="#52-写入新的-caddyfile包含你的谷歌密钥">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat &gt; /etc/caddy/Caddyfile <span style="color:#e6db74">&lt;&lt;EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 使用 Google Trust Services (GTS)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    acme_ca https://dv.acme-v02.api.pki.goog/directory
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    acme_eab {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        key_id b33a63ed1f543dc24236425112983a84
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        mac_key EZBbzPPpgbzQt_GDCGNJRSnM1c-xVEqXN18e4Iajrt1G7JDjEvaIA-7BnwBiNu15twNyqMrisHwhRYPqV6B7eA
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    email xuhxjxhk@gmail.com
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># Openlist 的反向代理配置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">oplist.hxjx.hidns.co {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    reverse_proxy localhost:5244
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 哪吒面板的反向代理配置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">mb.hxjx.hidns.co {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    reverse_proxy localhost:8008
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># Openlist 的反向代理配置2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">oplist.cc.cd {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    reverse_proxy localhost:5244
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span></code></pre></div><h3 id="53-清理旧缓存非常重要">5.3 清理旧缓存（非常重要）<a hidden class="anchor" aria-hidden="true" href="#53-清理旧缓存非常重要">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl stop caddy
+</span></span><span style="display:flex;"><span>rm -rf /var/lib/caddy/.local/share/caddy
+</span></span></code></pre></div><h3 id="54-启动并见证奇迹">5.4 启动并见证奇迹<a hidden class="anchor" aria-hidden="true" href="#54-启动并见证奇迹">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl start caddy
+</span></span><span style="display:flex;"><span>journalctl -u caddy -n <span style="color:#ae81ff">50</span> -f
+</span></span></code></pre></div><p>你会看到 Caddy 飞快地完成注册，日志里会出现 certificate obtained successfully。因为是谷歌自家的线路，这次应该在 1-2 秒内就能搞定。</p>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="//localhost:1313/tags/%E6%8A%80%E6%9C%AF/">技术</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="//localhost:1313/">我的博客</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
