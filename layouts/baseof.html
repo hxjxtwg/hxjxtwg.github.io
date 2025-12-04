@@ -20,24 +20,31 @@
     {{- block "custom-head" . }}{{ end -}}
 
     <style>
-      /* --- 刚插入的代码在这里 --- */
-      html, body {
-        width: 100% !important;
-        overflow-x: hidden !important;
-        margin: 0 !important;
-        padding: 0 !important;
+      /* === 1. 核心修复：防止 iOS 页面右移/撑大 === */
+      /* 强制所有元素计算边框在内，防止 padding 撑宽页面 */
+      *, *::before, *::after { box-sizing: border-box; }
+
+      html {
+        width: 100%;
+        overflow-x: hidden; /* 锁死 html 层级 */
       }
 
+      body {
+        width: 100%;
+        max-width: 100vw;   /* 强制最大宽度不超过屏幕 */
+        overflow-x: hidden; /* 锁死 body 层级 */
+        margin: 0;
+        padding: 0;
+        position: relative;
+      }
 
-      /* =================================================================
-         2. Halo 加载动画样式 (保持居中)
-         ================================================================= */
+      /* === 2. Halo 加载动画 (保持居中) === */
       #halo-racer-loader { 
-        position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;     
-        width: 100% !important; height: 100% !important; 
-        z-index: 999999999 !important; 
+        position: fixed; 
+        top: 0; left: 0; right: 0; bottom: 0; /* 四边贴死，确保全屏 */
+        z-index: 999999999; 
         background: #ffffff; 
-        display: flex !important; justify-content: center !important; align-items: center !important; 
+        display: flex; justify-content: center; align-items: center; 
         transition: opacity 0.3s ease, visibility 0.3s ease;
       }
       html.dark #halo-racer-loader { background: #1a1a1a; }
