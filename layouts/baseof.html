@@ -1,0 +1,97 @@
+{{- partial "init/index.html" . -}}
+
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="{{ .Site.LanguageCode }}">
+  <head>
+    {{- if .IsHome | and (ne .Site.Params.disableThemeInject true) }}
+    <meta name="theme" content='FixIt {{ hugo.Store.Get "version" }}'>
+    {{- end }}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
+
+    {{- partial "head/meta.html" . -}}
+    {{- partial "head/link.html" . -}}
+    {{- partial "head/seo.html" . -}}
+    {{- partial "head/script.html" . -}}
+    {{- /* TODO preload script https://developer.mozilla.org/zh-CN/docs/Web/HTML/Attributes/rel/preload */ -}}
+    {{- /* Custom head */ -}}
+    {{- block "custom-head" . }}{{ end -}}
+
+    <style>
+      #halo-racer-loader { 
+        position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;     
+        width: 100% !important; height: 100% !important; 
+        z-index: 999999999 !important; 
+        background: #ffffff; 
+        display: flex !important; justify-content: center !important; align-items: center !important; 
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      html.dark #halo-racer-loader { background: #1a1a1a; }
+      #halo-racer-loader.hidden { opacity: 0; visibility: hidden; }
+
+      .racer-container { position: relative; width: 80px; height: 20px; }
+      .bar { position: absolute; top: 0; left: 0; width: 12px; height: 20px; border-radius: 0; }
+      .p1 { background: rgba(255,71,87,0.2); z-index:1; animation: run 1.5s cubic-bezier(.4,0,.2,1) infinite 0.15s; }
+      .p2 { background: rgba(255,71,87,0.5); z-index:2; animation: run 1.5s cubic-bezier(.4,0,.2,1) infinite 0.08s; }
+      .red { background: #ff4757; z-index:10; animation: run 1.5s cubic-bezier(.4,0,.2,1) infinite 0s; }
+      @keyframes run { 0%{left:0} 30%{left:68px} 50%{left:68px} 80%{left:0} 100%{left:0} }
+    </style>
+  </head>
+  <body data-instant-intensity="viewport" data-header-desktop="{{ .Site.Params.header.desktopMode }}" data-header-mobile="{{ .Site.Params.header.mobileMode }}">
+
+    <div id="halo-racer-loader">
+      <div class="racer-container">
+        <div class="bar p1"></div>
+        <div class="bar p2"></div>
+        <div class="bar red"></div>
+      </div>
+    </div>
+
+    <script>
+      window.addEventListener('load', function() {
+        const loader = document.getElementById('halo-racer-loader');
+        if (loader) {
+            // 延迟 800ms 开始消失，让你看清动画
+            setTimeout(() => {
+                // 1. 开始变透明
+                loader.style.opacity = '0';
+                
+                // 2. 【核心修复】立刻允许鼠标穿透，点击失效问题解决！
+                loader.style.pointerEvents = 'none'; 
+                
+                // 3. 动画结束后彻底隐藏
+                setTimeout(() => { loader.style.display = 'none'; }, 300);
+            }, 800);
+        }
+      });
+      
+      // 超时兜底 (防止卡死)
+      setTimeout(() => { 
+          const loader = document.getElementById('halo-racer-loader');
+          if (loader) {
+              loader.style.display = 'none'; 
+              loader.style.pointerEvents = 'none';
+          }
+      }, 5000);
+    </script>
+
+    {{- /* Body wrapper */ -}}
+    <div class="wrapper" data-page-style="{{ (partial `function/params.html`).pageStyle | default `normal` }}">
+      {{- partial "header.html" . -}}
+      {{- partial "breadcrumb.html" . -}}
+      {{- $toc := .Store.Get "toc" -}}
+      <main class="fi-container"{{ if (eq $toc.enable true) | and (eq $toc.position `left`) }} data-reverse{{ end }}>
+        {{- block "content" . }}{{ end -}}
+      </main>
+      {{- partialCached "footer.html" . -}}
+    </div>
+
+    {{- /* Theme widgets */ -}}
+    {{- partial "widgets.html" . -}}
+
+    {{- /* Load JavaScript scripts and CSS */ -}}
+    {{- partial "assets.html" . -}}
+  </body>
+</html>

@@ -1,8 +1,8 @@
 ---
-title: {{ replace .TranslationBaseName "-" " " | title }}
+title: Hugo FixIt篇
 subtitle: ""
-date: {{ .Date }}
-# slug: {{ substr .File.UniqueID 0 7 }} # URL 别名 (可选，不需要可删掉)
+date: 2025-12-04T19:14:48+08:00
+# slug: 2c2a6f3 # URL 别名 (可选，不需要可删掉)
 
 # 是否是草稿？(已改为 false，新建即可见)
 draft: false
@@ -51,3 +51,4 @@ repost:
 
 <!--more-->
 
+由于dream主题有太多问题，现改为FIXLT主题
