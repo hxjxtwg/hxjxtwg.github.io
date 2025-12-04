@@ -126,3 +126,42 @@ html.dark .chroma .na { color: #50fa7b !important; } /* 属性名: 绿色 */
 html.dark .chroma .nt { color: #ff79c6 !important; } /* 标签名: 粉色 */
 html.dark .chroma .nb { color: #8be9fd !important; } /* 内置对象: 浅蓝 */
 
+/* ========================================================================
+   3. iOS/Safari 兼容性急救补丁 (修复菜单变垂直圆点问题)
+   ======================================================================== */
+
+/* 强制去掉列表前面的圆点 */
+nav ul, .menu, .navbar ul {
+    list-style: none !important;
+    list-style-type: none !important;
+    padding-left: 0 !important;
+    margin: 0 !important;
+}
+
+/* 强制菜单横向排列 (Flex布局) */
+nav ul, .menu {
+    display: flex !important;
+    flex-direction: row !important; /* 强制横向 */
+    align-items: center !important; /* 垂直居中 */
+    flex-wrap: wrap !important;     /* 小屏幕允许换行，防止撑爆 */
+    gap: 15px !important;           /* 按钮之间的间距 */
+}
+
+/* 强制菜单项显示模式 */
+nav li, .menu-item {
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* 修复图标和文字的垂直对齐 */
+nav a, .menu a {
+    display: inline-flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+    line-height: 1.5 !important;
+}
+
+/* 针对 iOS Safari 的滚动优化 (代码块) */
+.highlight pre {
+    -webkit-overflow-scrolling: touch !important; /* 让代码块滚动顺滑 */
+}
