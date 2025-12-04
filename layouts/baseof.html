@@ -20,28 +20,12 @@
     {{- block "custom-head" . }}{{ end -}}
 
     <style>
-      /* =================================================================
-         1. 全局布局修复 (解决 iOS 页面靠右/偏移问题)
-         ================================================================= */
-      html {
-          /* 核心修复：防止 iOS 横向晃动 */
-          overflow-x: hidden; 
-          width: 100%;
-      }
-      body { 
-          /* 核心修复：使用 100% 而不是 100vw，防止包含滚动条宽度 */
-          width: 100%; 
-          margin: 0; 
-          padding: 0; 
-          overflow-x: hidden;
-          position: relative; /* 确保子元素定位基准正确 */
-      }
-      
-      /* 修复代码块可能导致的撑开 */
-      .highlight { 
-          max-width: 100%; 
-          width: 100%;
-          box-sizing: border-box; /* 边框计算在内 */
+      /* --- 刚插入的代码在这里 --- */
+      html, body {
+        width: 100% !important;
+        overflow-x: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
       }
 
 
