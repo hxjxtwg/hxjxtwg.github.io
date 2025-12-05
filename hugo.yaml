@@ -5,7 +5,7 @@ theme: "hextra"
 # -------------------------------------------------------------------------
 
 baseURL: "http://localhost:1313/"
-title: "我的 Hextra 站点"
+title: "xxsky site"
 
 enableRobotsTXT: true
 enableGitInfo: true
