@@ -25,7 +25,7 @@ languages:
     languageName: 简体中文
     languageCode: zh-CN
     weight: 1
-    title: "我的 Hextra 站点"
+    title: "xxsky site"
     contentDir: content # 默认内容目录
 
   # === 👇 新增：英文配置 ===
@@ -33,7 +33,7 @@ languages:
     languageName: English
     languageCode: en-US
     weight: 2
-    title: "My Hextra Site"
+    title: "xxsky site"
     contentDir: content # 如果你使用文件名后缀区分语言（推荐），这里也填 content
 
 # 注意：module 模块已被删除，以防止报错
