@@ -1,0 +1,127 @@
+# -------------------------------------------------------------------------
+# 核心修正：指定本地主题文件夹，而不是用 module 远程加载
+# -------------------------------------------------------------------------
+theme: "hextra"
+# -------------------------------------------------------------------------
+
+baseURL: "http://localhost:1313/"
+title: "我的 Hextra 站点"
+
+enableRobotsTXT: true
+enableGitInfo: true
+hasCJKLanguage: true
+
+outputs:
+  home: [html]
+  page: [html]
+  section: [html, rss]
+
+# 默认语言
+defaultContentLanguage: zh-cn
+
+languages:
+  # === 现有的中文配置 ===
+  zh-cn:
+    languageName: 简体中文
+    languageCode: zh-CN
+    weight: 1
+    title: "我的 Hextra 站点"
+    contentDir: content # 默认内容目录
+
+  # === 👇 新增：英文配置 ===
+  en:
+    languageName: English
+    languageCode: en-US
+    weight: 2
+    title: "My Hextra Site"
+    contentDir: content # 如果你使用文件名后缀区分语言（推荐），这里也填 content
+
+# 注意：module 模块已被删除，以防止报错
+
+markup:
+  highlight:
+    noClasses: false
+  goldmark:
+    renderer:
+      unsafe: true
+    extensions:
+      passthrough:
+        delimiters:
+          block: [['\[', '\]'], ['$$', '$$']]
+          inline: [['\(', '\)']]
+        enable: true
+
+menu:
+  main:
+    - name: 文档
+      pageRef: /docs
+      weight: 1
+    - name: 博客
+      pageRef: /blog
+      weight: 2
+    - name: 搜索
+      weight: 3
+      params:
+        type: search
+    - name: GitHub
+      weight: 4
+      url: "https://github.com/hxjxtwg/hxjxtwg.github.io"
+      params:
+        icon: github
+    - name: Email
+      url: "mailto:xuhxjxhk@mail.com"
+      weight: 5
+      params:
+        icon: mail    # 或者是 at-symbol
+
+params:
+  description: "xxsky的个人网站，记录学习笔记与生活点滴。"
+  navbar:
+    displayTitle: true
+    displayLogo: true
+    logo:
+      path: images/logo.svg
+      dark: images/logo-dark.svg
+      link: /
+      width: 40
+      height: 40 
+
+
+  # 搜索设置
+  search:
+    enable: true
+    type: flexsearch
+    flexsearch:
+      index: content
+      tokenize: forward
+
+  footer:
+    enable: true
+    displayPoweredBy: false  # 隐藏 "由 Hextra 驱动"
+    displayCopyright: true   # 显示版权信息
+    # 👇 支持 HTML 写法，把链接换成你的
+    width: normal
+
+  page:
+    width: normal
+    
+  # 博客列表设置
+  blog:
+    list:
+      displayTags: true
+      sortBy: date
+      sortOrder: desc
+      pagerSize: 20
+  
+  #评论系统 
+  comments:
+    enable: true
+    type: "giscus"
+    giscus:
+      repo: "hxjxtwg/hxjxtwg.github.io"      # 你的仓库名
+      repoId: "R_kgDOQhrNHw"                 # 你的仓库 ID
+      category: "Announcements"              # 分类名
+      categoryId: "DIC_kwDOQhrNH84CzbsH"     # 分类 ID
+      mapping: "pathname"                    # 映射方式
+      loading: "lazy"                        # 懒加载
+      lang: "zh-CN"                          # 语言

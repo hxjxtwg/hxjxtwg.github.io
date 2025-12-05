@@ -1,0 +1,109 @@
+<div id="halo-racer-loader">
+  <div class="racer-container">
+    <div class="bar p1"></div>
+    <div class="bar p2"></div>
+    <div class="bar red"></div>
+  </div>
+</div>
+
+<style>
+  #halo-racer-loader { 
+    position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;      
+    width: 100% !important; height: 100% !important; 
+    z-index: 999999999 !important; 
+    background: #ffffff; 
+    display: flex !important; justify-content: center !important; align-items: center !important; 
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  html.dark #halo-racer-loader { background: #1a1a1a; }
+  #halo-racer-loader.hidden { opacity: 0; visibility: hidden; }
+
+  .racer-container { position: relative; width: 80px; height: 20px; }
+  .bar { position: absolute; top: 0; left: 0; width: 12px; height: 20px; border-radius: 0; }
+  .p1 { background: rgba(255,71,87,0.2); z-index:1; animation: run 1.5s cubic-bezier(.4,0,.2,1) infinite 0.15s; }
+  .p2 { background: rgba(255,71,87,0.5); z-index:2; animation: run 1.5s cubic-bezier(.4,0,.2,1) infinite 0.08s; }
+  .red { background: #ff4757; z-index:10; animation: run 1.5s cubic-bezier(.4,0,.2,1) infinite 0s; }
+  @keyframes run { 0%{left:0} 30%{left:68px} 50%{left:68px} 80%{left:0} 100%{left:0} }
+</style>
+
+<script>
+  window.addEventListener('load', function() {
+    const loader = document.getElementById('halo-racer-loader');
+    if (loader) {
+        setTimeout(() => {
+            loader.style.opacity = '0';
+            loader.style.pointerEvents = 'none'; 
+            setTimeout(() => { loader.style.display = 'none'; }, 300);
+        }, 800);
+    }
+  });
+  
+  // 超时兜底
+  setTimeout(() => { 
+      const loader = document.getElementById('halo-racer-loader');
+      if (loader) {
+          loader.style.display = 'none'; 
+          loader.style.pointerEvents = 'none';
+      }
+  }, 5000);
+</script>
+
+{{- $navWidth := "hx:max-w-[90rem]" -}}
+{{- with .Site.Params.navbar.width -}}
+  {{ if eq . "normal" -}}
+    {{ $navWidth = "hx:max-w-screen-xl" -}}
+  {{ else if eq . "full" -}}
+    {{ $navWidth = "max-w-full" -}}
+  {{ end -}}
+{{- end -}}
+
+{{- $page := . -}}
+{{- $iconHeight := 24 -}}
+
+<div class="hextra-nav-container hx:sticky hx:top-0 hx:z-20 hx:w-full hx:bg-transparent hx:print:hidden">
+  <div
+    class="hextra-nav-container-blur hx:pointer-events-none hx:absolute hx:z-[-1] hx:h-full hx:w-full hx:bg-white hx:dark:bg-dark hx:shadow-[0_2px_4px_rgba(0,0,0,.02),0_1px_0_rgba(0,0,0,.06)] hx:contrast-more:shadow-[0_0_0_1px_#000] hx:dark:shadow-[0_-1px_0_rgba(255,255,255,.1)_inset] hx:contrast-more:dark:shadow-[0_0_0_1px_#fff]"
+  ></div>
+
+  <nav class="hextra-max-navbar-width hx:mx-auto hx:flex hx:items-center hx:justify-end hx:gap-2 hx:h-16 hx:px-6">
+    {{ partial "navbar-title.html" . }}
+
+    {{- $currentPage := . -}}
+    {{- range .Site.Menus.main -}}
+      {{- if eq .Params.type "search" -}}
+        {{- partial "search.html" (dict "params" .Params) -}}
+      {{- else -}}
+        {{- $link := .URL -}}
+        {{- $external := strings.HasPrefix $link "http" -}}
+        {{- with .PageRef -}}
+          {{- if hasPrefix . "/" -}}
+            {{- $link = relLangURL (strings.TrimPrefix "/" .) -}}
+          {{- end -}}
+        {{- end -}}
+
+        {{- if eq .Params.type "link" -}}
+          {{- partial "navbar-link.html" (dict "currentPage" $currentPage "link" $link "external" $external "item" . "icon" .Params.icon) -}}
+        {{- else if eq .Params.type "theme-toggle" -}}
+          {{- partial "theme-toggle.html" (dict "iconHeight" $iconHeight "hideLabel" (not .Params.label) "iconHeight" $iconHeight "location" "top" "class" "hx:p-2") -}}
+        {{- else if eq .Params.type "language-switch" -}}
+          {{- partial "language-switch" (dict "context" $page "grow" false "hideLabel" (not .Params.label) "iconName" (.Params.icon | default "translate") "iconHeight" $iconHeight "location" "top" "class" "hx:p-2") -}}
+        {{- else if .Params.icon -}}
+          {{- /* Display icon menu item */ -}}
+          {{- if not $link -}}{{ warnf "Icon menu item '%s' has no URL" .Name }}{{- end -}}
+          {{- $rel := cond (eq .Params.icon "mastodon") "noreferrer me" "noreferrer" }}
+          <a class="hx:p-2 hx:text-current" {{ if $external }}target="_blank" rel="{{ $rel }}"{{ end }} href="{{ $link }}" title="{{ or (T .Identifier) .Name | safeHTML }}">
+            {{- partial "utils/icon.html" (dict "name" .Params.icon "attributes" (printf "height=%d" $iconHeight)) -}}
+            <span class="hx:sr-only">{{ or (T .Identifier) .Name | safeHTML }}</span>
+          </a>
+        {{- else -}}
+          {{- partial "navbar-link.html" (dict "currentPage" $currentPage "link" $link "external" $external "item" .) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+
+
+    <button type="button" aria-label="Menu" class="hextra-hamburger-menu hx:cursor-pointer hx:-mr-2 hx:rounded-sm hx:p-2 hx:active:bg-gray-400/20 hx:md:hidden">
+      {{- partial "utils/icon.html" (dict "name" "hamburger-menu" "attributes" (printf "height=%d" $iconHeight)) -}}
+    </button>
+  </nav>
+</div>
