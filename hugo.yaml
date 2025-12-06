@@ -63,10 +63,10 @@ menu:
     - name: 博客
       pageRef: /blog
       weight: 2
-    - name: 搜索
-      weight: 3
-      params:
-        type: search
+  #  - name: 搜索
+  #    weight: 3
+  #    params:
+  #      type: search
     - name: GitHub
       weight: 4
       url: "https://github.com/hxjxtwg/hxjxtwg.github.io"
