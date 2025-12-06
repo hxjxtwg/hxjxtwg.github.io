@@ -11,6 +11,10 @@ enableRobotsTXT: true
 enableGitInfo: true
 hasCJKLanguage: true
 
+build:
+  # 关闭 SRI 指纹生成
+  fingerprint: false
+
 outputs:
   home: [html]
   page: [html]
@@ -89,7 +93,7 @@ params:
 
   # 搜索设置
   search:
-    enable: true
+    enable: false
     type: flexsearch
     flexsearch:
       index: content
