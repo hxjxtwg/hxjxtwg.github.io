@@ -4,7 +4,7 @@
 theme: "hextra"
 # -------------------------------------------------------------------------
 
-baseURL: "http://localhost:1313/"
+baseURL: "http://xxsky.nyc.mn"
 title: "xxsky site"
 
 enableRobotsTXT: true
