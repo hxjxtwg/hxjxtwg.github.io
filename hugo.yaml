@@ -4,7 +4,7 @@
 theme: "hextra"
 # -------------------------------------------------------------------------
 
-baseURL: "http://xxsky.nyc.mn"
+baseURL: "https://xxsky.nyc.mn"
 title: "xxsky site"
 
 enableRobotsTXT: true
